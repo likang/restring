@@ -16,8 +16,7 @@
 	import { guessJwt } from '../routes/jwt/jwt';
 
 	import type { Preview } from '$lib/types';
-
-	import { addHistory } from './history.svelte';
+	import { unshiftHistory } from '$lib/history';
 
 
 	let inputText = $state('');
@@ -39,12 +38,12 @@
 
 	function historySelected(his: string) {
 		inputText = his;
-		addHistory(his);
+		unshiftHistory(his);
 	}
 
 	function onPaste(event: Event) {
 		setTimeout(() => {
-			addHistory(trimmedInputText);
+			unshiftHistory(trimmedInputText);
 		}, 0);
 	}
 </script>

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import HistoryIcon from '$lib/icons/History.svelte';
-	import { history } from './history.svelte';
 	import { clickOutsideDropdown } from '$lib/attachments/clickOutside';
+	import { getHistory } from '$lib/history';
 
 	let { historySelected }: { historySelected: (his: string) => void } = $props();
 
 	let detailsElement: HTMLDetailsElement;
+	let history = $state<string[]>([]);
 
 	function handleHistoryClick(his: string) {
 		historySelected(his);
@@ -13,10 +14,21 @@
 			detailsElement.removeAttribute('open');
 		}
 	}
+
+	function handleToggle(event: Event) {
+		if (detailsElement.open) {
+			history = getHistory();
+		}
+	}
 </script>
 
 <div class="tooltip" data-tip="History">
-	<details class="dropdown" bind:this={detailsElement} {@attach clickOutsideDropdown}>
+	<details
+		class="dropdown"
+		bind:this={detailsElement}
+		ontoggle={handleToggle}
+		{@attach clickOutsideDropdown}
+	>
 		<summary class="btn btn-ghost btn-sm btn-square m-1">
 			<HistoryIcon class="size-[1.2em]" />
 		</summary>
