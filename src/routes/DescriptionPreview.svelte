@@ -1,15 +1,15 @@
 <script lang="ts">
-	import type { DescriptionPreview } from '$lib/restring';
+	import type { DescriptionItem } from '$lib/types';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 
-	let { preview }: { preview: DescriptionPreview } = $props();
+	let { value, show }: { value: DescriptionItem[]; show: boolean } = $props();
 </script>
 
-<div class="mb-6 bg-white/5">
+<div class="mb-6 bg-white/5" class:hidden={!show}>
 	<div class="min-h-32 overflow-x-auto">
 		<table class="table-sm table w-full">
 			<tbody>
-				{#each preview.value as desc}
+				{#each value as desc}
 					<tr>
 						<td
 							class="w-px whitespace-nowrap text-white/50"

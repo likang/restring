@@ -1,11 +1,9 @@
 <script lang="ts">
-	import type { TextPreview } from '$lib/types';
-
-	let { preview }: { preview: TextPreview } = $props();
+	let { value, show }: { value: string; show: boolean } = $props();
 </script>
 
-<div class="mb-6 bg-white/5">
+<div class="mb-6 bg-white/5" class:hidden={!show}>
 	<div class="min-h-32">
-		<p class="p-1 text-white/90">{preview.value}</p>
-	</div>
+		<p class="p-1 text-white/90">{value}</p>
+	</div>	
 </div>

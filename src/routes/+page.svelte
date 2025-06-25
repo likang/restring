@@ -8,33 +8,41 @@
 	import UnknownPreview from './UnknownPreview.svelte';
 	import Tools from './Tools.svelte';
 
-	import { guessJSON } from '../routes/json/json';
-	import { guessUrl } from '../routes/url/url';
-	import { guessDate } from '../routes/datetime/datetime';
-	import { guessColor } from '../routes/color/color';
-	import { guessBase64 } from '../routes/base64/base64';
-	import { guessJwt } from '../routes/jwt/jwt';
+	import { guessJSON } from './json/json';
+	import { guessUrl } from './url/url';
+	import { guessDate } from './datetime/datetime';
+	import { guessColor } from './color/color';
+	import { guessBase64 } from './base64/base64';
+	import { guessJwt } from './jwt/jwt';
 
-	import type { Preview } from '$lib/types';
+	import type { DescriptionItem } from '$lib/types';
 	import { unshiftHistory } from '$lib/history';
-
 
 	let inputText = $state('');
 	let trimmedInputText = $derived(inputText.trim());
-	let preview: Preview | null = $derived.by(() => {
-		if (trimmedInputText.length === 0) {
-			return null;
-		}
+
+	let previewType = $state<string | null>(null);
+	let previewTextValue = $state<string | null>(null);
+	let previewDescriptionValue = $state<DescriptionItem[] | null>(null);
+
+	$effect(() => {
+		if (trimmedInputText.length === 0) return;
+
+		previewType = 'unknown';
 		// guessUrl should be before guessDate, because http://example.com/?a=1 can be parsed as a Date by new Date()
 		for (const parser of [guessJSON, guessUrl, guessDate, guessColor, guessBase64, guessJwt]) {
 			let result = parser(trimmedInputText);
 			if (result) {
-				return result;
+				previewType = result.type;
+				if (result.type === 'text') {
+					previewTextValue = result.value;
+				} else if (result.type === 'description') {
+					previewDescriptionValue = result.value;
+				}
+				break;
 			}
 		}
-		return null;
 	});
-
 
 	function historySelected(his: string) {
 		inputText = his;
@@ -68,16 +76,17 @@
 				placeholder="Paste json/timestamp/color etc here to get quick preview"
 			></textarea>
 			<div>
-				{#if inputText.length !== 0}
-					{#if preview}
-						{#if preview.type === 'text'}
-							<TextPreview {preview} />
-						{:else if preview.type === 'description'}
-							<DescriptionPreview {preview} />
-						{/if}
-					{:else}
-						<UnknownPreview />
-					{/if}
+				{#if previewTextValue !== null}
+					<TextPreview value={previewTextValue} show={previewType === 'text'} />
+				{/if}
+				{#if previewDescriptionValue !== null}
+					<DescriptionPreview
+						value={previewDescriptionValue}
+						show={previewType === 'description'}
+					/>
+				{/if}
+				{#if previewType !== null}
+					<UnknownPreview show={inputText.length !== 0 && previewType === 'unknown'} />
 				{/if}
 			</div>
 		</div>
