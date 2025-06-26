@@ -33,16 +33,22 @@
 			<HistoryIcon class="size-[1.2em]" />
 		</summary>
 		<ul class="dropdown-content bg-base-100 rounded-box right-0 z-1 w-52 p-2 text-xs shadow-sm">
-			{#each history as his (his)}
+			{#if history.length > 0}
+				{#each history as his (his)}
+					<li>
+						<button
+							class="hover:bg-base-content/10 w-full cursor-pointer rounded-sm px-3 py-1.5 text-start outline-hidden"
+							onclick={() => handleHistoryClick(his)}
+						>
+							<span class="line-clamp-2 break-all">{his}</span>
+						</button>
+					</li>
+				{/each}
+			{:else}
 				<li>
-					<button
-						class="hover:bg-base-content/10 w-full cursor-pointer rounded-sm px-3 py-1.5 text-start outline-hidden"
-						onclick={() => handleHistoryClick(his)}
-					>
-						<span class="line-clamp-2 break-all">{his}</span>
-					</button>
+					<span class="text-base-content/50 text-sm">No history</span>
 				</li>
-			{/each}
+			{/if}
 		</ul>
 	</details>
 </div>
