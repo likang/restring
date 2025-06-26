@@ -7,8 +7,8 @@ export const guessJSON: IParse = (input) => {
 	}
 
 	try {
-		JSON.parse(input);
-		return { type: 'json', value: input };
+		const parsed = JSON.parse(input);
+		return { type: 'json', value: JSON.stringify(parsed, null, 2) };
 	} catch {
 		return null;
 	}

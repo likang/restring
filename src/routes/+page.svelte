@@ -2,6 +2,8 @@
 	import { dev } from '$app/environment';
 
 	import ShuffleIcon from '$lib/icons/Shuffle.svelte';
+	import JsonPreview from '$lib/components/JsonPreview.svelte';
+
 	import HistoryButton from './HistoryButton.svelte';
 	import TextPreview from './TextPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';
@@ -23,6 +25,7 @@
 
 	let previewType = $state<string | null>(null);
 	let previewTextValue = $state<string | null>(null);
+	let previewJsonValue = $state<string | null>(null);
 	let previewDescriptionValue = $state<DescriptionItem[] | null>(null);
 
 	$effect(() => {
@@ -36,6 +39,8 @@
 				previewType = result.type;
 				if (result.type === 'text') {
 					previewTextValue = result.value;
+				} else if (result.type === 'json') {
+					previewJsonValue = result.value;
 				} else if (result.type === 'description') {
 					previewDescriptionValue = result.value;
 				}
@@ -84,6 +89,9 @@
 						value={previewDescriptionValue}
 						show={previewType === 'description'}
 					/>
+				{/if}
+				{#if previewJsonValue !== null}
+					<JsonPreview value={previewJsonValue} show={previewType === 'json'} />
 				{/if}
 				{#if previewType !== null}
 					<UnknownPreview show={inputText.length !== 0 && previewType === 'unknown'} />
