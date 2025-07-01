@@ -2,10 +2,10 @@
 	import { dev } from '$app/environment';
 
 	import ShuffleIcon from '$lib/icons/Shuffle.svelte';
-	import JsonPreview from '$lib/components/JsonPreview.svelte';
 
 	import HistoryButton from './HistoryButton.svelte';
 	import TextPreview from './TextPreview.svelte';
+	import JsonPreview from './JsonPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';
 	import UnknownPreview from './UnknownPreview.svelte';
 	import Tools from './Tools.svelte';
@@ -25,7 +25,7 @@
 
 	let previewType = $state<string | null>(null);
 	let previewTextValue = $state<string | null>(null);
-	let previewJsonValue = $state<string | null>(null);
+	let previewJsonValue = $state<any | null>(null);
 	let previewDescriptionValue = $state<DescriptionItem[] | null>(null);
 
 	$effect(() => {
@@ -91,7 +91,7 @@
 					/>
 				{/if}
 				{#if previewJsonValue !== null}
-					<JsonPreview value={previewJsonValue} show={previewType === 'json'} />
+					<JsonPreview value={previewJsonValue} show={previewType === 'json'} raw={inputText} />
 				{/if}
 				{#if previewType !== null}
 					<UnknownPreview show={inputText.length !== 0 && previewType === 'unknown'} />
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 
-		<div class="mt-32">
+		<div class="mt-16">
 			<Tools />
 		</div>
 	</div>
