@@ -39,7 +39,7 @@
 	});
 
 	function saveState(element: Element) {
-		sessionStorage.setItem('json-state', JSON.stringify({ value: raw }));
+		sessionStorage.setItem('json-input', raw);
 	}
 </script>
 

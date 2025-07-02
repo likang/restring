@@ -16,12 +16,12 @@
 	const historyKey = 'history-json';
 
 	if (browser) {
-		const stateStr = sessionStorage.getItem('json-state');
-		try {
-			const state = JSON.parse(stateStr ?? '{}');
-			sourceValue = state.value ?? '';
-			sessionStorage.removeItem('json-state');
-		} catch {}
+		const jsonInput = sessionStorage.getItem('json-input');
+		if (jsonInput) {
+			sourceValue = jsonInput;
+			unshiftHistory(jsonInput, historyKey);
+			sessionStorage.removeItem('json-input');
+		}
 	}
 
 	$effect(() => {
