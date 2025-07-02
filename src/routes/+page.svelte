@@ -2,8 +2,8 @@
 	import { dev } from '$app/environment';
 
 	import ShuffleIcon from '$lib/icons/Shuffle.svelte';
+	import HistoryButton from '$lib/components/HistoryButton.svelte';
 
-	import HistoryButton from './HistoryButton.svelte';
 	import TextPreview from './TextPreview.svelte';
 	import JsonPreview from './JsonPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';

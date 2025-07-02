@@ -3,7 +3,7 @@
 	import { clickOutsideDropdown } from '$lib/attachments/clickOutside';
 	import { getHistory } from '$lib/history';
 
-	let { historySelected }: { historySelected: (his: string) => void } = $props();
+	let { historySelected, key }: { historySelected: (his: string) => void; key?:string } = $props();
 
 	let detailsElement: HTMLDetailsElement;
 	let history = $state<string[]>([]);
@@ -17,7 +17,7 @@
 
 	function handleToggle(event: Event) {
 		if (detailsElement.open) {
-			history = getHistory();
+			history = getHistory(key);
 		}
 	}
 </script>

@@ -1,17 +1,17 @@
 const MAX_HISTORY_LENGTH = 10;
 const HISTORY_KEY = 'history';
 
-export function getHistory() {
-	const historyStr = localStorage.getItem(HISTORY_KEY);
+export function getHistory(key: string = HISTORY_KEY) {
+	const historyStr = localStorage.getItem(key);
 	return historyStr ? JSON.parse(historyStr) : [];
 }
 
-export function unshiftHistory(text: string) {
+export function unshiftHistory(text: string, key: string = HISTORY_KEY) {
 	if (text.length === 0) {
 		return;
 	}
 
-	const history = getHistory();
+	const history = getHistory(key);
 
 	if (history.length > 0 && history[0] === text) {
 		return;
@@ -24,5 +24,5 @@ export function unshiftHistory(text: string) {
 	while (history.length > MAX_HISTORY_LENGTH) {
 		history.pop();
 	}
-	localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+	localStorage.setItem(key, JSON.stringify(history));
 }
