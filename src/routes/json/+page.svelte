@@ -4,12 +4,16 @@
 	import { oneDark } from '@codemirror/theme-one-dark';
 	import { onMount } from 'svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import HistoryButton from '$lib/components/HistoryButton.svelte';
 	import { browser } from '$app/environment';
+	import { unshiftHistory } from '$lib/history';
 
 	let sourceContainer: HTMLDivElement | null = null;
 	let resultContainer: HTMLDivElement | null = null;
 	let sourceValue = $state('');
 	let resultValue = $state('');
+
+	const historyKey = 'history-json';
 
 	if (browser) {
 		const stateStr = sessionStorage.getItem('json-state');
@@ -43,6 +47,17 @@
 					if (update.docChanged) {
 						sourceValue = update.state.doc.toString();
 					}
+				}),
+				EditorView.domEventHandlers({
+					paste: (event: ClipboardEvent) => {
+						const pastedText = event.clipboardData?.getData('text') ?? '';
+						setTimeout(() => {
+							if (sourceValue === pastedText) {
+								unshiftHistory(sourceValue, historyKey);
+							}
+						}, 0);
+						return false;
+					}
 				})
 			]
 		});
@@ -60,10 +75,20 @@
 		});
 
 		$effect(() => {
-			resultEditorView!.dispatch({
+			sourceEditorView.dispatch({
 				changes: {
 					from: 0,
-					to: resultEditorView!.state.doc.length,
+					to: sourceEditorView.state.doc.length,
+					insert: sourceValue
+				}
+			});
+		});
+
+		$effect(() => {
+			resultEditorView.dispatch({
+				changes: {
+					from: 0,
+					to: resultEditorView.state.doc.length,
 					insert: resultValue
 				}
 			});
@@ -73,14 +98,20 @@
 			sourceEditorView.destroy();
 		};
 	});
+
+	function historySelected(his: string) {
+		sourceValue = his;
+		unshiftHistory(his, historyKey);
+	}
 </script>
 
 <div class="grid h-[calc(100vh-4rem)] grid-cols-1 gap-4 md:grid-cols-2">
 	<div class="flex flex-col">
-		<div class="flex items-center justify-between p-2">
-			<div class="flex items-center gap-2">
+		<div class="flex items-center p-2">
+			<div class="flex flex-1 items-center gap-2">
 				<span class="text-lg font-semibold">Source</span>
 			</div>
+			<HistoryButton {historySelected} key={historyKey} />
 			<CopyButton
 				text={sourceValue}
 				class="btn btn-square btn-ghost btn-sm"

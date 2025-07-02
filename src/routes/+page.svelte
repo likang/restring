@@ -54,9 +54,12 @@
 		unshiftHistory(his);
 	}
 
-	function onPaste(event: Event) {
+	function onPaste(event: ClipboardEvent) {
+		const pastedText = event.clipboardData?.getData('text') ?? '';
 		setTimeout(() => {
-			unshiftHistory(trimmedInputText);
+			if (pastedText === inputText) {
+				unshiftHistory(trimmedInputText);
+			}
 		}, 0);
 	}
 </script>
