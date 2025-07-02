@@ -45,19 +45,18 @@
 
 <div class="mb-6" class:hidden={!show}>
 	<div class="flex items-center justify-between p-2">
-		<a
-			href="/json"
-			class="link link-hover text-lg font-semibold"
-			{@attach beforeLinkOpen(saveState)}>JSON</a
-		>
+		<div class="flex flex-1 items-center gap-2">
+			<span class="text-lg font-semibold">JSON</span>
+			<a
+				href="/json"
+				class="link link-primary link-hover text-sm"
+				{@attach beforeLinkOpen(saveState)}>Advanced mode</a
+			>
+		</div>
+
 		<CopyButton text={value} class="btn btn-square btn-ghost btn-sm" iconClass="size-[1.2em]" />
 	</div>
 	<div class="cm-container" bind:this={container}></div>
-	<div class="flex justify-end p-2">
-		<a href="/json" class="link link-primary text-sm" {@attach beforeLinkOpen(saveState)}
-			>Open in advanced mode</a
-		>
-	</div>
 </div>
 
 <style>
