@@ -2,10 +2,10 @@
 	import type { DescriptionItem } from '$lib/types';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 
-	let { value, show }: { value: DescriptionItem[]; show: boolean } = $props();
+	let { value }: { value: DescriptionItem[] } = $props();
 </script>
 
-<div class="mb-6 bg-white/5" class:hidden={!show}>
+<div class="mb-6 bg-white/5">
 	<div class="min-h-32 overflow-x-auto">
 		<table class="table-sm table w-full">
 			<tbody>

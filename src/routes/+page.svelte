@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 
+	import { beforeLinkOpen } from '$lib/attachments/beforeLinkOpen';
+	import { unshiftHistory } from '$lib/history';
 	import ShuffleIcon from '$lib/icons/Shuffle.svelte';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
+	import JsonEditor from './json/JsonEditor.svelte';
 
 	import TextPreview from './TextPreview.svelte';
-	import JsonPreview from './JsonPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';
 	import UnknownPreview from './UnknownPreview.svelte';
 	import Tools from './Tools.svelte';
@@ -17,36 +19,19 @@
 	import { guessBase64 } from './base64/base64';
 	import { guessJwt } from './jwt/jwt';
 
-	import type { DescriptionItem } from '$lib/types';
-	import { unshiftHistory } from '$lib/history';
-
 	let inputText = $state('');
 	let trimmedInputText = $derived(inputText.trim());
 
-	let previewType = $state<string | null>(null);
-	let previewTextValue = $state<string | null>(null);
-	let previewJsonValue = $state<any | null>(null);
-	let previewDescriptionValue = $state<DescriptionItem[] | null>(null);
-
-	$effect(() => {
-		if (trimmedInputText.length === 0) return;
-
-		previewType = 'unknown';
+	let preview = $derived.by(() => {
+		if (trimmedInputText.length === 0) return null;
 		// guessUrl should be before guessDate, because http://example.com/?a=1 can be parsed as a Date by new Date()
 		for (const parser of [guessJSON, guessUrl, guessDate, guessColor, guessBase64, guessJwt]) {
 			let result = parser(trimmedInputText);
 			if (result) {
-				previewType = result.type;
-				if (result.type === 'text') {
-					previewTextValue = result.value;
-				} else if (result.type === 'json') {
-					previewJsonValue = result.value;
-				} else if (result.type === 'description') {
-					previewDescriptionValue = result.value;
-				}
-				break;
+				return result;
 			}
 		}
+		return null;
 	});
 
 	function historySelected(his: string) {
@@ -57,20 +42,24 @@
 	function onPaste(event: ClipboardEvent) {
 		const pastedText = event.clipboardData?.getData('text') ?? '';
 		setTimeout(() => {
-			if (pastedText === inputText) {
+			if (pastedText.length === inputText.length) {
 				unshiftHistory(trimmedInputText);
 			}
 		}, 0);
 	}
+
+	function saveState(element: Element) {
+		sessionStorage.setItem('json-input', inputText);
+	}
 </script>
 
 <div class="m-auto max-w-2xl">
-	<div class="h-full p-6">
+	<div class="h-full px-6">
 		<div>
-			<div class="flex justify-end">
+			<div class="flex justify-end p-2">
 				{#if dev}
 					<div class="tooltip" data-tip="Random Input">
-						<button class="btn btn-ghost btn-sm btn-square m-1">
+						<button class="btn btn-ghost btn-sm btn-square">
 							<ShuffleIcon class="size-[1.2em]" />
 						</button>
 					</div>
@@ -80,30 +69,42 @@
 			<textarea
 				bind:value={inputText}
 				onpaste={onPaste}
-				class="mt-3 mb-6 block h-32 w-full resize-none rounded-lg border-none bg-white/10 px-3 py-1.5 text-sm/6 text-white placeholder:text-center placeholder:leading-28 focus:outline-2 focus:-outline-offset-2 focus:outline-white/25"
+				class="mb-3 block h-32 w-full resize-none rounded-lg border-none bg-white/10 px-3 py-1.5 text-sm/6 text-white placeholder:text-center placeholder:leading-28 focus:outline-2 focus:-outline-offset-2 focus:outline-white/25"
 				placeholder="Paste json/timestamp/color etc here to get quick preview"
 			></textarea>
-			<div>
-				{#if previewTextValue !== null}
-					<TextPreview value={previewTextValue} show={previewType === 'text'} />
-				{/if}
-				{#if previewDescriptionValue !== null}
-					<DescriptionPreview
-						value={previewDescriptionValue}
-						show={previewType === 'description'}
-					/>
-				{/if}
-				{#if previewJsonValue !== null}
-					<JsonPreview value={previewJsonValue} show={previewType === 'json'} raw={inputText} />
-				{/if}
-				{#if previewType !== null}
-					<UnknownPreview show={inputText.length !== 0 && previewType === 'unknown'} />
+			<div class="preview-wrapper">
+				{#if preview?.type === 'text'}
+					<TextPreview value={preview.value} />
+				{:else if preview?.type === 'description'}
+					<DescriptionPreview value={preview.value} />
+				{:else if preview?.type === 'json'}
+					<JsonEditor jsonObj={preview.value}>
+						{#snippet header()}
+							<span class="text-lg font-semibold">JSON</span>
+							<a
+								href="/json"
+								class="link link-primary link-hover text-sm"
+								{@attach beforeLinkOpen(saveState)}
+							>
+								Advanced mode
+							</a>
+						{/snippet}
+					</JsonEditor>
+				{:else if trimmedInputText.length !== 0 && preview === null}
+					<UnknownPreview />
 				{/if}
 			</div>
 		</div>
 
-		<div class="mt-16">
+		<div class="mt-6">
 			<Tools />
 		</div>
 	</div>
 </div>
+
+<style>
+	.preview-wrapper :global(.cm-editor) {
+		@reference "tailwindcss";
+		@apply max-h-[calc(100vh-36rem)] min-h-32 overflow-auto;
+	}
+</style>
