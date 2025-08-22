@@ -1,8 +1,38 @@
 <script lang="ts">
-	import { EditorView, basicSetup } from 'codemirror';
-	import { json } from '@codemirror/lang-json';
-	import { oneDark } from '@codemirror/theme-one-dark';
+	import { EditorView } from 'codemirror';
+	import { json } from './json-lang';
+
+	import { mode, theme } from 'mode-watcher';
+
+	import {
+		lineNumbers,
+		highlightActiveLineGutter,
+		highlightSpecialChars,
+		drawSelection,
+		dropCursor,
+		rectangularSelection,
+		crosshairCursor,
+		highlightActiveLine,
+		keymap
+	} from '@codemirror/view';
+	export { EditorView } from '@codemirror/view';
+	import { EditorState } from '@codemirror/state';
+	import {
+		foldGutter,
+		indentOnInput,
+		syntaxHighlighting,
+		defaultHighlightStyle,
+		bracketMatching,
+		foldKeymap
+	} from '@codemirror/language';
+	import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
+	import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
+
+	import { oneDark as githubDark } from '$lib/codemirror/codemirror-one-dark';
+	import { oneLight as oneLight } from '$lib/codemirror/codemirror-one-light';
+
 	import { Compartment } from '@codemirror/state';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
 
 	import {
 		search,
@@ -19,19 +49,19 @@
 
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
-	import { clickOutsideDropdown } from '$lib/attachments/clickOutside';
-	import SearchIcon from '$lib/icons/Search.svelte';
-	import DownloadIcon from '$lib/icons/Download.svelte';
-	import CloseIcon from '$lib/icons/Close.svelte';
-	import CompressionIcon from '$lib/icons/Compression.svelte';
-	import ArrowDownIcon from '$lib/icons/ArrowDown.svelte';
-	import ArrowUpIcon from '$lib/icons/ArrowUp.svelte';
-	import RegexIcon from '$lib/icons/Regex.svelte';
-	import MoreIcon from '$lib/icons/More.svelte';
+	import SearchIcon from '@lucide/svelte/icons/search';
+	import DownloadIcon from '@lucide/svelte/icons/download';
+	import CloseIcon from '@lucide/svelte/icons/x';
+	import ShrinkIcon from '@lucide/svelte/icons/shrink';
+	import ArrowDownIcon from '@lucide/svelte/icons/move-down';
+	import ArrowUpIcon from '@lucide/svelte/icons/move-up';
+	import MoreIcon from '@lucide/svelte/icons/more-vertical';
+	import RegexIcon from '@lucide/svelte/icons/regex';
 
 	import { unshiftHistory } from '$lib/history';
-	import TextOverflowIcon from '$lib/icons/TextOverflow.svelte';
-
+	import TextOverflowIcon from '$lib/components/icons/TextOverflow.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import Input from '$lib/components/ui/input/input.svelte';
 	let cmContainer: HTMLDivElement;
 	let headerContainer: HTMLDivElement;
 
@@ -49,6 +79,7 @@
 		compact = false,
 		textOverflow = false,
 		historyKey = HISTORY_KEY,
+		readonly = false,
 		header
 	}: {
 		jsonStr?: string; // raw json string, undefined means readonly viewer
@@ -56,10 +87,9 @@
 		compact?: boolean;
 		textOverflow?: boolean;
 		historyKey?: string;
+		readonly?: boolean;
 		header?: Snippet;
 	} = $props();
-
-	let isReadonlyViewer = $derived(jsonStr === undefined);
 
 	let docStr = $derived.by(() => {
 		const js = jsonStr ?? '';
@@ -68,23 +98,42 @@
 		} else if (jsonObj !== undefined) {
 			return JSON.stringify(jsonObj, null, compact ? undefined : 2);
 		} else {
-			return isReadonlyViewer ? '' : js;
+			return readonly ? '' : js;
 		}
 	});
 
 	let editorView: EditorView;
 
+	const jsonBasicSetup = (() => [
+		lineNumbers(),
+		highlightSpecialChars(),
+		history(),
+		foldGutter(),
+		drawSelection(),
+		dropCursor(),
+		EditorState.allowMultipleSelections.of(true),
+		indentOnInput(),
+		syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+		bracketMatching(),
+		rectangularSelection(),
+		crosshairCursor(),
+		highlightSelectionMatches(),
+		keymap.of([...defaultKeymap, ...searchKeymap, ...historyKeymap, ...foldKeymap])
+	])();
+
 	onMount(() => {
 		const editableCompartment = new Compartment();
 		const wrapCompartment = new Compartment();
+		const highlightActiveLineCompartment = new Compartment();
+		const themeCompartment = new Compartment();
 
 		editorView = new EditorView({
 			parent: cmContainer,
 			doc: docStr,
 			extensions: [
-				basicSetup,
+				jsonBasicSetup,
 				json(),
-				oneDark,
+				themeCompartment.of(mode.current === 'dark' ? githubDark : oneLight),
 				search({
 					createPanel: (view) => {
 						return {
@@ -93,10 +142,13 @@
 					}
 				}),
 				wrapCompartment.of(textOverflow ? [] : EditorView.lineWrapping),
-				editableCompartment.of(EditorView.editable.of(!isReadonlyViewer)),
+				editableCompartment.of(EditorView.editable.of(!readonly)),
+				highlightActiveLineCompartment.of(
+					readonly ? [] : [highlightActiveLine(), highlightActiveLineGutter()]
+				),
 				EditorView.updateListener.of((update) => {
 					if (update.docChanged) {
-						if (isReadonlyViewer) {
+						if (readonly) {
 							return;
 						}
 						muteDocChange = true;
@@ -124,13 +176,19 @@
 
 		$effect(() => {
 			editorView.dispatch({
-				effects: editableCompartment.reconfigure(EditorView.editable.of(!isReadonlyViewer))
+				effects: editableCompartment.reconfigure(EditorView.editable.of(!readonly))
 			});
 		});
 
 		$effect(() => {
 			editorView.dispatch({
 				effects: wrapCompartment.reconfigure(textOverflow ? [] : EditorView.lineWrapping)
+			});
+		});
+
+		$effect(() => {
+			editorView.dispatch({
+				effects: themeCompartment.reconfigure(mode.current === 'dark' ? githubDark : oneLight)
 			});
 		});
 
@@ -189,107 +247,101 @@
 </script>
 
 {#snippet searchBar()}
-	<label class="input input-sm">
-		<SearchIcon class="size-[1em] opacity-50" />
-		<input
+	<div class="relative">
+		<Input
 			type="input"
-			class="grow"
 			placeholder="Search"
+			class="h-7 pr-16"
 			bind:value={searchValue}
 			onkeydown={(e) => {
-				if (e.key === 'Escape') {
+				if (e.key == 'Escape') {
 					searchOpen = false;
 				}
 			}}
 		/>
-		<div class="flex flex-row items-center">
-			<button class="btn btn-xs btn-ghost px-0.5" onclick={handleFindPrevious}>
-				<ArrowUpIcon class="size-[1em]" />
-			</button>
-			<button class="btn btn-xs btn-ghost px-0.5" onclick={handleFindNext}>
-				<ArrowDownIcon class="size-[1em]" />
-			</button>
-			<button
-				class="btn btn-xs btn-ghost px-0.5"
+
+		<div class="absolute inset-y-0 right-1 flex flex-row items-center">
+			<Button
+				variant="ghost"
+				class="h-6 rounded-xs has-[>svg]:px-0.5"
 				onclick={() => (searchUsingRegex = !searchUsingRegex)}
 			>
-				<RegexIcon class="size-[1em] {searchUsingRegex ? 'text-primary' : ''}" />
-			</button>
+				<RegexIcon class={searchUsingRegex ? 'text-blue-600' : ''} />
+			</Button>
 		</div>
-	</label>
-	<button
-		class="btn btn-square btn-ghost btn-sm"
+	</div>
+	<Button variant="ghost" size="icon" onclick={handleFindPrevious}>
+		<ArrowUpIcon />
+	</Button>
+	<Button variant="ghost" size="icon" onclick={handleFindNext}>
+		<ArrowDownIcon />
+	</Button>
+	<Button
+		variant="ghost"
+		size="icon"
 		onclick={() => {
 			searchOpen = false;
 		}}
 	>
-		<CloseIcon class="size-[1.2em]" />
-	</button>
+		<CloseIcon />
+	</Button>
 {/snippet}
 
-<div class="flex flex-col">
-	<div class="flex items-center gap-2 p-2" bind:this={headerContainer}>
+<div class="flex min-h-0 flex-col">
+	<div class="flex items-center gap-2 py-1" bind:this={headerContainer}>
 		{@render header?.()}
 		<div class="flex flex-1 items-center justify-end">
 			{#if searchOpen}
 				{@render searchBar()}
 			{:else}
-				<div class="tooltip" data-tip="Search">
-					<button
-						class="btn btn-square btn-ghost btn-sm"
-						onclick={() => {
-							searchOpen = true;
-						}}
-					>
-						<SearchIcon class="size-[1.2em]" />
-					</button>
-				</div>
-				{#if isReadonlyViewer}
-					<div class="tooltip" data-tip="Compact">
-						<button class="btn btn-square btn-ghost btn-sm" onclick={() => (compact = !compact)}>
-							<CompressionIcon class="size-[1.2em] {compact ? 'text-primary' : ''}" />
-						</button>
-					</div>
+				<Button
+					variant="ghost"
+					size="icon"
+					onclick={() => {
+						searchOpen = true;
+					}}
+				>
+					<SearchIcon />
+				</Button>
+
+				{#if readonly}
+					<Button variant="ghost" size="icon" onclick={() => (compact = !compact)}>
+						<ShrinkIcon class={compact ? 'text-blue-600' : ''} />
+					</Button>
 				{/if}
-				{#if !isReadonlyViewer}
+				{#if !readonly}
 					<HistoryButton {historySelected} key={historyKey} />
 				{/if}
-				<div class="tooltip" data-tip="Copy">
-					<CopyButton
-						text={docStr}
-						class="btn btn-square btn-ghost btn-sm"
-						iconClass="size-[1.2em]"
-					/>
-				</div>
+				<CopyButton text={docStr} variant="ghost" size="icon" />
 
-				<details class="dropdown dropdown-end" {@attach clickOutsideDropdown}>
-					<summary class="btn btn-square btn-ghost btn-sm">
-						<MoreIcon class="size-[1.2em]" />
-					</summary>
-					<ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-max p-2 shadow-sm">
-						<li>
-							<button class="cursor-auto" onclick={() => (textOverflow = !textOverflow)}>
-								<TextOverflowIcon class="size-[1.2em] {textOverflow ? 'text-primary' : ''}" />
-								No Wrap
-							</button>
-						</li>
-
-						<li>
-							<button class="cursor-auto">
-								<DownloadIcon class="size-[1.2em]" />
-								Download
-							</button>
-						</li>
-					</ul>
-				</details>
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						{#snippet child({ props })}
+							<Button {...props} variant="ghost" size="icon">
+								<MoreIcon />
+							</Button>
+						{/snippet}
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end">
+						<DropdownMenu.Item onclick={() => (textOverflow = !textOverflow)}>
+							<TextOverflowIcon class={textOverflow ? 'text-blue-600' : ''} />
+							No Wrap
+						</DropdownMenu.Item>
+						<DropdownMenu.Item>
+							<DownloadIcon />
+							Download
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			{/if}
 		</div>
 	</div>
-	<div class="cm-container relative flex-1" bind:this={cmContainer}></div>
+	<div class="cm-container relative min-h-0 flex-1" bind:this={cmContainer}></div>
 </div>
 
 <style>
-	.cm-container :global(.cm-panels) {
-		border: none !important;
+	.cm-container :global(.cm-editor) {
+		@reference "tailwindcss";
+		@apply rounded-md py-3;
 	}
 </style>

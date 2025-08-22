@@ -1,0 +1,37 @@
+@top JsonText { value }
+
+value { ws? (True | False | Null | Number | String | Object | Array) ws? }
+
+String[isolate] { string }
+Object { "{" (ws | list<Property>)? "}" }
+Array  { "[" (ws | list<value>)? "]" }
+
+Property { ws? PropertyName ws? ":" value }
+PropertyName[isolate] { string }
+
+string {'"' (char|Esc)* '"'}
+
+@tokens {
+  True  { "true" }
+  False { "false" }
+  Null  { "null" }
+
+  Number { '-'? int frac? exp?  }
+  int  { '0' | $[1-9] @digit* }
+  frac { '.' @digit+ }
+  exp  { $[eE] $[+\-]? @digit+ }
+
+  char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] }
+  Esc  { "\\" ( $["\\\/bfnrt] | "u" hex hex hex hex) }
+  hex  { $[0-9a-fA-F] }
+
+  ws { $[ \n\r\t]+ }
+
+  "{" "}" "[" "]" "," ":"
+}
+
+list<item> { item ("," item)* }
+
+@external propSource jsonHighlighting from "./highlight"
+
+@detectDelim

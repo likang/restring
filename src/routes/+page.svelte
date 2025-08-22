@@ -3,14 +3,19 @@
 
 	import { beforeLinkOpen } from '$lib/attachments/beforeLinkOpen';
 	import { unshiftHistory } from '$lib/history';
-	import ShuffleIcon from '$lib/icons/Shuffle.svelte';
+	import ShuffleIcon from '@lucide/svelte/icons/shuffle';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
 	import JsonEditor from './json/JsonEditor.svelte';
+
+	import { Textarea } from '$lib/components/ui/textarea/index';
+	import { Button } from '$lib/components/ui/button/index';
 
 	import TextPreview from './TextPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';
 	import UnknownPreview from './UnknownPreview.svelte';
 	import Tools from './Tools.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip/index';
+	import { buttonVariants } from '$lib/components/ui/button/index';
 
 	import { guessJSON } from './json/json';
 	import { guessUrl } from './url/url';
@@ -56,22 +61,20 @@
 <div class="m-auto max-w-2xl">
 	<div class="h-full px-6">
 		<div>
-			<div class="flex justify-end p-2">
+			<div class="flex items-center justify-end py-1">
 				{#if dev}
-					<div class="tooltip" data-tip="Random Input">
-						<button class="btn btn-ghost btn-sm btn-square">
-							<ShuffleIcon class="size-[1.2em]" />
-						</button>
-					</div>
+					<Button variant="ghost" size="icon">
+						<ShuffleIcon />
+					</Button>
 				{/if}
 				<HistoryButton {historySelected} />
 			</div>
-			<textarea
+			<Textarea
 				bind:value={inputText}
 				onpaste={onPaste}
-				class="mb-3 block h-32 w-full resize-none rounded-lg border-none bg-white/10 px-3 py-1.5 text-sm/6 text-white placeholder:text-center placeholder:leading-28 focus:outline-2 focus:-outline-offset-2 focus:outline-white/25"
 				placeholder="Paste json/timestamp/color etc here to get quick preview"
-			></textarea>
+				class="h-32"
+			></Textarea>
 			<div class="preview-wrapper">
 				{#if preview?.type === 'text'}
 					<TextPreview value={preview.value} />

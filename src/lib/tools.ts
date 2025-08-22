@@ -1,15 +1,12 @@
-import JsonIcon from '$lib/icons/Json.svelte';
-import TimeIcon from '$lib/icons/Time.svelte';
-import ColorIcon from '$lib/icons/Color.svelte';
-import Base64Icon from '$lib/icons/Base64.svelte';
-import NumberBaseIcon from '$lib/icons/NumberBase.svelte';
-import UnicodeIcon from '$lib/icons/Unicode.svelte';
-import UrlIcon from '$lib/icons/Url.svelte';
-import RegexIcon from '$lib/icons/Regex.svelte';
-import HtmlIcon from '$lib/icons/Html.svelte';
-import JwtIcon from '$lib/icons/Jwt.svelte';
-import QrCodeIcon from '$lib/icons/QrCode.svelte';
-import CronIcon from '$lib/icons/Cron.svelte';
+import JsonIcon from '$lib/components/icons/Json.svelte';
+import TimeIcon from '@lucide/svelte/icons/clock';
+import ColorIcon from '@lucide/svelte/icons/palette';
+import Base64Icon from '$lib/components/icons/Base64.svelte';
+import EscapeIcon from '$lib/components/icons/Escape.svelte';
+import UrlIcon from '@lucide/svelte/icons/link';
+import RegexIcon from '@lucide/svelte/icons/regex';
+import JwtIcon from '$lib/components/icons/Jwt.svelte';
+import QrCodeIcon from '@lucide/svelte/icons/qr-code';
 
 export const allTools = [
 	{
@@ -35,13 +32,8 @@ export const allTools = [
 	},
 	{
 		href: '#',
-		title: 'Number Bases',
-		icon: NumberBaseIcon
-	},
-	{
-		href: '#',
-		title: 'Unicode',
-		icon: UnicodeIcon
+		title: 'Escape',
+		icon: EscapeIcon
 	},
 	{
 		href: '#',
@@ -55,11 +47,6 @@ export const allTools = [
 	},
 	{
 		href: '#',
-		title: 'HTML',
-		icon: HtmlIcon
-	},
-	{
-		href: '#',
 		title: 'JWT',
 		icon: JwtIcon
 	},
@@ -67,10 +54,5 @@ export const allTools = [
 		href: '#',
 		title: 'QR Code',
 		icon: QrCodeIcon
-	},
-	{
-		href: '#',
-		title: 'Cron Job',
-		icon: CronIcon
 	}
 ];

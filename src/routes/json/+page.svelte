@@ -30,14 +30,14 @@
 	});
 </script>
 
-<div class="json-wrapper grid h-[calc(100vh-4rem)] grid-cols-1 gap-4 md:grid-cols-2">
+<div class="json-wrapper grid h-[calc(100vh-(var(--spacing)*14))] grid-cols-1 gap-2 md:grid-cols-2">
 	<JsonEditor bind:jsonStr>
 		{#snippet header()}
 			<span class="text-lg font-semibold">Source</span>
 		{/snippet}
 	</JsonEditor>
 
-	<JsonEditor {jsonObj}>
+	<JsonEditor {jsonObj} readonly>
 		{#snippet header()}
 			<span class="text-lg font-semibold">Formatted</span>
 		{/snippet}
@@ -45,11 +45,17 @@
 </div>
 
 <style>
+	.json-wrapper {
+		@reference "tailwindcss";
+		@apply px-2;
+	}
+
 	.json-wrapper :global(.cm-editor) {
-		position: absolute !important;
+		height: 100%;
+		/* position: absolute !important;
 		top: 0;
 		left: 0;
 		right: 0;
-		bottom: 0;
+		bottom: 0; */
 	}
 </style>
