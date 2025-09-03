@@ -2,21 +2,12 @@
 	import CopyIcon from '@lucide/svelte/icons/copy';
 	import DoneIcon from '@lucide/svelte/icons/check-check';
 	import { onDestroy } from 'svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import type { ButtonProps } from '$lib/components/ui/button/button.svelte';
 
 	let {
-		iconClass,
 		text,
-		...restProps
-	}: {
-		iconClass?: string;
-		text: string;
-		variant?: ButtonProps['variant'];
-		size?: ButtonProps['size'];
-		class?: string;
-		restProps?: ButtonProps;
-	} = $props();
+		class: className = 'btn-icon-ghost',
+		tooltip
+	}: { text: string; class?: string; tooltip?: string } = $props();
 
 	let isCopied = $state(false);
 	let timeoutId: number | undefined;
@@ -45,10 +36,10 @@
 	});
 </script>
 
-<Button onclick={handleClick} {...restProps}>
+<button onclick={handleClick} class={className} data-tooltip={tooltip}>
 	{#if isCopied}
-		<DoneIcon class={iconClass} />
+		<DoneIcon />
 	{:else}
-		<CopyIcon class={iconClass} />
+		<CopyIcon />
 	{/if}
-</Button>
+</button>

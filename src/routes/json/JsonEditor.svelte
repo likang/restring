@@ -2,7 +2,7 @@
 	import { EditorView } from 'codemirror';
 	import { json } from './json-lang';
 
-	import { mode, theme } from 'mode-watcher';
+	import { mode } from 'mode-watcher';
 
 	import {
 		lineNumbers,
@@ -32,7 +32,6 @@
 	import { oneLight as oneLight } from '$lib/codemirror/codemirror-one-light';
 
 	import { Compartment } from '@codemirror/state';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
 
 	import {
 		search,
@@ -57,11 +56,10 @@
 	import ArrowUpIcon from '@lucide/svelte/icons/move-up';
 	import MoreIcon from '@lucide/svelte/icons/more-vertical';
 	import RegexIcon from '@lucide/svelte/icons/regex';
+	import TextWrapIcon from '@lucide/svelte/icons/wrap-text';
+	import CheckIcon from '@lucide/svelte/icons/check';
 
 	import { unshiftHistory } from '$lib/history';
-	import TextOverflowIcon from '$lib/components/icons/TextOverflow.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
 	let cmContainer: HTMLDivElement;
 	let headerContainer: HTMLDivElement;
 
@@ -90,6 +88,8 @@
 		readonly?: boolean;
 		header?: Snippet;
 	} = $props();
+
+	const popoverMoreId = 'popover-more-' + Math.random().toString(36).slice(2, 10);
 
 	let docStr = $derived.by(() => {
 		const js = jsonStr ?? '';
@@ -248,10 +248,10 @@
 
 {#snippet searchBar()}
 	<div class="relative">
-		<Input
-			type="input"
+		<input
+			type="text"
 			placeholder="Search"
-			class="h-7 pr-16"
+			class="input h-7 pr-8"
 			bind:value={searchValue}
 			onkeydown={(e) => {
 				if (e.key == 'Escape') {
@@ -261,30 +261,28 @@
 		/>
 
 		<div class="absolute inset-y-0 right-1 flex flex-row items-center">
-			<Button
-				variant="ghost"
-				class="h-6 rounded-xs has-[>svg]:px-0.5"
+			<button
+				class="btn-ghost h-6 rounded-xs px-0.5"
 				onclick={() => (searchUsingRegex = !searchUsingRegex)}
 			>
 				<RegexIcon class={searchUsingRegex ? 'text-blue-600' : ''} />
-			</Button>
+			</button>
 		</div>
 	</div>
-	<Button variant="ghost" size="icon" onclick={handleFindPrevious}>
+	<button class="btn-icon-ghost" onclick={handleFindPrevious}>
 		<ArrowUpIcon />
-	</Button>
-	<Button variant="ghost" size="icon" onclick={handleFindNext}>
+	</button>
+	<button class="btn-icon-ghost" onclick={handleFindNext}>
 		<ArrowDownIcon />
-	</Button>
-	<Button
-		variant="ghost"
-		size="icon"
+	</button>
+	<button
+		class="btn-icon-ghost"
 		onclick={() => {
 			searchOpen = false;
 		}}
 	>
 		<CloseIcon />
-	</Button>
+	</button>
 {/snippet}
 
 <div class="flex min-h-0 flex-col">
@@ -294,45 +292,69 @@
 			{#if searchOpen}
 				{@render searchBar()}
 			{:else}
-				<Button
-					variant="ghost"
-					size="icon"
+				<button
+					class="btn-icon-ghost"
+					data-tooltip="Search"
 					onclick={() => {
 						searchOpen = true;
 					}}
 				>
 					<SearchIcon />
-				</Button>
+				</button>
 
 				{#if readonly}
-					<Button variant="ghost" size="icon" onclick={() => (compact = !compact)}>
+					<button
+						class="btn-icon-ghost"
+						data-tooltip="Toggle compact mode"
+						onclick={() => (compact = !compact)}
+					>
 						<ShrinkIcon class={compact ? 'text-blue-600' : ''} />
-					</Button>
+					</button>
 				{/if}
 				{#if !readonly}
 					<HistoryButton {historySelected} key={historyKey} />
 				{/if}
-				<CopyButton text={docStr} variant="ghost" size="icon" />
+				<CopyButton text={docStr} tooltip="Copy" />
 
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
-							<Button {...props} variant="ghost" size="icon">
-								<MoreIcon />
-							</Button>
-						{/snippet}
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end">
-						<DropdownMenu.Item onclick={() => (textOverflow = !textOverflow)}>
-							<TextOverflowIcon class={textOverflow ? 'text-blue-600' : ''} />
-							No Wrap
-						</DropdownMenu.Item>
-						<DropdownMenu.Item>
-							<DownloadIcon />
-							Download
-						</DropdownMenu.Item>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
+				<div id={popoverMoreId} class="dropdown-menu">
+					<button
+						type="button"
+						id={popoverMoreId + '-trigger'}
+						aria-haspopup="menu"
+						aria-controls={popoverMoreId + '-menu'}
+						aria-expanded="false"
+						class="btn-icon-ghost"
+					>
+						<MoreIcon />
+					</button>
+					<div
+						id={popoverMoreId + '-popover'}
+						data-popover
+						data-side="bottom"
+						data-align="end"
+						aria-hidden="true"
+					>
+						<div
+							role="menu"
+							id={popoverMoreId + '-menu'}
+							aria-labelledby={popoverMoreId + '-trigger'}
+						>
+							<button role="menuitem" onclick={() => (textOverflow = !textOverflow)}>
+								{#if textOverflow}
+									<TextWrapIcon />
+								{:else}
+									<CheckIcon />
+								{/if}
+
+								Text Wrap
+							</button>
+							<button role="menuitem">
+								<DownloadIcon />
+								Download
+							</button>
+						</div>
+					</div>
+				</div>
 			{/if}
 		</div>
 	</div>
