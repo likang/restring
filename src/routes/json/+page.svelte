@@ -1,43 +1,34 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { unshiftHistory } from '$lib/history';
-
 	import JsonEditor from './JsonEditor.svelte';
+	import { states } from './state.svelte';
 
-	const historyKey = 'history-json';
 	const whitespaceRegex = /^\s*$/;
 
-	let jsonStr = $state('');
-	if (browser) {
-		const jsonInput = sessionStorage.getItem('json-input');
-		if (jsonInput) {
-			jsonStr = jsonInput;
-			unshiftHistory(jsonInput, historyKey);
-			sessionStorage.removeItem('json-input');
+	function onDocChanged(txt: string) {
+		states.txt = txt;
+
+		if (whitespaceRegex.test(txt)) {
+			states.obj = undefined;
+		} else {
+			try {
+				states.obj = JSON.parse(txt);
+			} catch {
+				states.obj = undefined;
+			}
 		}
 	}
-
-	let jsonObj = $derived.by(() => {
-		if (whitespaceRegex.test(jsonStr)) {
-			return undefined;
-		}
-
-		try {
-			return JSON.parse(jsonStr);
-		} catch {
-			return null;
-		}
-	});
 </script>
 
-<div class="json-wrapper grid h-[calc(100vh-(var(--spacing)*14))] grid-cols-1 gap-2 md:grid-cols-2">
-	<JsonEditor bind:jsonStr>
+<div
+	class="json-wrapper grid h-[calc(100vh-(var(--spacing)*14))] grid-cols-1 gap-2 px-2 md:grid-cols-2"
+>
+	<JsonEditor txt={states.txt} {onDocChanged}>
 		{#snippet header()}
 			<span class="text-lg font-semibold">Source</span>
 		{/snippet}
 	</JsonEditor>
 
-	<JsonEditor {jsonObj} readonly>
+	<JsonEditor obj={states.obj} readonly>
 		{#snippet header()}
 			<span class="text-lg font-semibold">Formatted</span>
 		{/snippet}
@@ -45,17 +36,7 @@
 </div>
 
 <style>
-	.json-wrapper {
-		@reference "tailwindcss";
-		@apply px-2;
-	}
-
 	.json-wrapper :global(.cm-editor) {
 		height: 100%;
-		/* position: absolute !important;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0; */
 	}
 </style>

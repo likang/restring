@@ -1,16 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import CopyButton from '$lib/components/CopyButton.svelte';
-	import { page } from '$app/state';
-
-	import type { Colord } from 'colord';
 	import { colord, getFormat } from './color';
-	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
+	import { states, setColor, type Source } from './state.svelte';
 
-	import { colors } from './state.svelte';
-
-	const onHomepage = $derived(page.url.pathname === '/');
-
-	type Source = 'picker' | 'hex' | 'rgb' | 'hsl' | 'hwb' | 'lch' | 'cmyk';
+	let { header }: { header?: Snippet } = $props();
 
 	let hexInput: HTMLInputElement;
 	let rgbInput: HTMLInputElement;
@@ -19,76 +14,37 @@
 	let lchInput: HTMLInputElement;
 	let cmykInput: HTMLInputElement;
 
-	let { color }: { color?: Colord } = $props();
-	if (color && color.isValid()) {
-		onColorChange(color);
-	}
-
 	function onColorInputChange(source: Source) {
 		return (event: Event) => {
 			const value = (event.target as HTMLInputElement).value;
-			if (source !== 'picker' && getFormat(value) !== source) {
-				if (value !== '') {
-					colors[source].error = true;
+			if (source !== 'picker') {
+				if (getFormat(value) !== source) {
+					if (value !== '') {
+						states[source].error = true;
+					}
+					return;
 				}
-				return;
+				states[source].error = false;
 			}
-			colors[source].error = false;
-			onColorChange(colord(value), source);
+			const newColor = colord(value);
+			setColor(newColor, source);
 		};
-	}
-
-	function onColorChange(color: Colord, source?: Source) {
-		colors.previewColor = color.toHex();
-		colors.picker.value = colors.previewColor.substring(0, 7);
-
-		if (source !== 'hex') {
-			colors.hex.value = color.toHex();
-			colors.hex.error = false;
-		}
-		if (source !== 'rgb') {
-			colors.rgb.value = color.toRgbString();
-			colors.rgb.error = false;
-		}
-		if (source !== 'hsl') {
-			colors.hsl.value = color.toHslString();
-			colors.hsl.error = false;
-		}
-		if (source !== 'hwb') {
-			colors.hwb.value = color.toHwbString();
-			colors.hwb.error = false;
-		}
-		if (source !== 'lch') {
-			colors.lch.value = color.toLchString();
-			colors.lch.error = false;
-		}
-		if (source !== 'cmyk') {
-			colors.cmyk.value = color.toCmykString();
-			colors.cmyk.error = false;
-		}
 	}
 </script>
 
-<div class="py-1">
-	{#if onHomepage}
-		<a href="/color" class="btn-link text-sm">
-			<span class="text-lg font-semibold">Color</span>
-			<ExternalLinkIcon class="size-4" />
-		</a>
-	{/if}
-</div>
+{@render header?.()}
 <div class="flex flex-col gap-2">
 	<div class="relative">
 		<label
 			class="border-input border-1px block h-9 w-full rounded-md border"
-			style="background-color: {colors.previewColor}"
+			style="background-color: {states.previewColor}"
 			for="color-picker"
 		></label>
 		<input
 			id="color-picker"
 			type="color"
 			class="invisible absolute top-0 left-1/3 h-9"
-			value={colors.picker.value}
+			value={states.pickerColor}
 			oninput={onColorInputChange('picker')}
 		/>
 	</div>
@@ -98,9 +54,9 @@
 			type="text"
 			class="input"
 			placeholder="Hex, e.g. #fafafa"
-			value={colors.hex.value}
+			value={states.hex.value}
 			oninput={onColorInputChange('hex')}
-			aria-invalid={colors.hex.error}
+			aria-invalid={states.hex.error}
 		/>
 		<CopyButton
 			text={() => hexInput.value}
@@ -113,9 +69,9 @@
 			type="text"
 			class="input"
 			placeholder="Rgb, e.g. rgb(250, 250, 250)"
-			value={colors.rgb.value}
+			value={states.rgb.value}
 			oninput={onColorInputChange('rgb')}
-			aria-invalid={colors.rgb.error}
+			aria-invalid={states.rgb.error}
 		/>
 		<CopyButton
 			text={() => rgbInput.value}
@@ -128,9 +84,9 @@
 			type="text"
 			class="input"
 			placeholder="Hsl, e.g. hsl(0, 0%, 100%)"
-			value={colors.hsl.value}
+			value={states.hsl.value}
 			oninput={onColorInputChange('hsl')}
-			aria-invalid={colors.hsl.error}
+			aria-invalid={states.hsl.error}
 		/>
 		<CopyButton
 			text={() => hslInput.value}
@@ -143,9 +99,9 @@
 			type="text"
 			class="input"
 			placeholder="Hwb, e.g. hwb(0, 0%, 0%)"
-			value={colors.hwb.value}
+			value={states.hwb.value}
 			oninput={onColorInputChange('hwb')}
-			aria-invalid={colors.hwb.error}
+			aria-invalid={states.hwb.error}
 		/>
 		<CopyButton
 			text={() => hwbInput.value}
@@ -158,9 +114,9 @@
 			type="text"
 			class="input"
 			placeholder="Lch, e.g. lch(0, 0%, 0%)"
-			value={colors.lch.value}
+			value={states.lch.value}
 			oninput={onColorInputChange('lch')}
-			aria-invalid={colors.lch.error}
+			aria-invalid={states.lch.error}
 		/>
 		<CopyButton
 			text={() => lchInput.value}
@@ -173,9 +129,9 @@
 			type="text"
 			class="input"
 			placeholder="Cmyk, e.g. cmyk(0, 0%, 0%, 0%)"
-			value={colors.cmyk.value}
+			value={states.cmyk.value}
 			oninput={onColorInputChange('cmyk')}
-			aria-invalid={colors.cmyk.error}
+			aria-invalid={states.cmyk.error}
 		/>
 		<CopyButton
 			text={() => cmykInput.value}

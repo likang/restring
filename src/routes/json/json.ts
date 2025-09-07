@@ -8,8 +8,11 @@ export const guessJSON: IParse = (input) => {
 
 	try {
 		const parsed = JSON.parse(input);
-		return { type: 'json', value: parsed, raw: input };
-	} catch {
+		return { type: 'json', value: { obj: parsed, txt: input } };
+	} catch (e) {
+		console.error(e);
 		return null;
 	}
 };
+
+export const HISTORY_KEY_JSON = 'history-json';

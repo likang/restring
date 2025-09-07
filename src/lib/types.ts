@@ -5,7 +5,7 @@ export type DescriptionItem = {
 	value?: string;
 };
 
-export type JsonPreview = { type: 'json'; value: any; raw: string };
+export type JsonPreview = { type: 'json'; value: { obj: any; txt: string } };
 export type TextPreview = { type: 'text'; value: string };
 export type DescriptionPreview = { type: 'description'; value: DescriptionItem[] };
 export type ImagePreview = { type: 'image'; value: string };

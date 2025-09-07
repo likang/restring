@@ -60,6 +60,8 @@
 	import CheckIcon from '@lucide/svelte/icons/check';
 
 	import { unshiftHistory } from '$lib/history';
+	import { HISTORY_KEY_JSON } from './json';
+
 	let cmContainer: HTMLDivElement;
 	let headerContainer: HTMLDivElement;
 
@@ -67,38 +69,35 @@
 	let searchOpen = $state(false);
 	let searchUsingRegex = $state(false);
 
-	let muteDocChange = false;
-
-	const HISTORY_KEY = 'history-json';
+	let syncing = false;
 
 	let {
-		jsonStr = $bindable(),
-		jsonObj,
+		txt,
+		obj,
 		compact = false,
 		textOverflow = false,
-		historyKey = HISTORY_KEY,
 		readonly = false,
+		onDocChanged,
 		header
 	}: {
-		jsonStr?: string; // raw json string, undefined means readonly viewer
-		jsonObj?: any; // parsed json object
+		txt?: string; // raw json string
+		obj?: any; // parsed json object
 		compact?: boolean;
 		textOverflow?: boolean;
-		historyKey?: string;
 		readonly?: boolean;
+		onDocChanged?: (txt: string) => void;
 		header?: Snippet;
 	} = $props();
 
 	const popoverMoreId = 'popover-more-' + Math.random().toString(36).slice(2, 10);
 
 	let docStr = $derived.by(() => {
-		const js = jsonStr ?? '';
-		if (jsonObj === null) {
-			return 'Invalid JSON';
-		} else if (jsonObj !== undefined) {
-			return JSON.stringify(jsonObj, null, compact ? undefined : 2);
+		if (txt) {
+			return txt;
+		} else if (obj) {
+			return JSON.stringify(obj, null, compact ? 0 : 2);
 		} else {
-			return readonly ? '' : js;
+			return '';
 		}
 	});
 
@@ -151,10 +150,10 @@
 						if (readonly) {
 							return;
 						}
-						muteDocChange = true;
-						jsonStr = update.state.doc.toString();
+						syncing = true;
+						onDocChanged?.(update.state.doc.toString());
 						tick().then(() => {
-							muteDocChange = false;
+							syncing = false;
 						});
 					} else {
 						searchOpen = searchPanelOpen(update.state);
@@ -162,10 +161,10 @@
 				}),
 				EditorView.domEventHandlers({
 					paste: (event: ClipboardEvent) => {
-						const pastedText = event.clipboardData?.getData('text') ?? '';
+						const pastedTextLength = (event.clipboardData?.getData('text') ?? '').length;
 						setTimeout(() => {
-							if (pastedText.length === docStr.length) {
-								unshiftHistory(pastedText, historyKey);
+							if (pastedTextLength === docStr.length) {
+								unshiftHistory(docStr, HISTORY_KEY_JSON);
 							}
 						}, 0);
 						return false;
@@ -194,7 +193,7 @@
 
 		$effect(() => {
 			const doc = docStr;
-			if (muteDocChange) {
+			if (syncing) {
 				return;
 			}
 			editorView.dispatch({
@@ -241,8 +240,14 @@
 	}
 
 	function historySelected(his: string) {
-		jsonStr = his;
-		unshiftHistory(his, historyKey);
+		editorView.dispatch({
+			changes: {
+				from: 0,
+				to: editorView.state.doc.length,
+				insert: his
+			}
+		});
+		unshiftHistory(his, HISTORY_KEY_JSON);
 	}
 </script>
 
@@ -312,7 +317,7 @@
 					</button>
 				{/if}
 				{#if !readonly}
-					<HistoryButton {historySelected} key={historyKey} />
+					<HistoryButton {historySelected} key={HISTORY_KEY_JSON} />
 				{/if}
 				<CopyButton text={docStr} tooltip="Copy" />
 
