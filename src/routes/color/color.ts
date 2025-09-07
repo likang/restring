@@ -1,5 +1,5 @@
 import type { IParse } from '$lib/types';
-import { colord, extend } from 'colord';
+import { colord, extend, getFormat } from 'colord';
 import hwbPlugin from 'colord/plugins/hwb';
 import lchPlugin from 'colord/plugins/lch';
 import cmykPlugin from 'colord/plugins/cmyk';
@@ -13,17 +13,12 @@ export const guessColor: IParse = (input) => {
 			return null;
 		}
 		return {
-			type: 'description',
-			value: [
-				{ label: 'Hex', value: color.toHex() },
-				{ label: 'Rgb', value: color.toRgbString() },
-				{ label: 'Hsl', value: color.toHslString() },
-				{ label: 'Hwb', value: color.toHwbString() },
-				{ label: 'Lch', value: color.toLchString() },
-				{ label: 'Cmyk', value: color.toCmykString() }
-			]
+			type: 'color',
+			value: color
 		};
 	} catch {
 		return null;
 	}
 };
+
+export { colord, getFormat };

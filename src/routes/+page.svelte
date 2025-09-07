@@ -5,7 +5,9 @@
 	import { unshiftHistory } from '$lib/history';
 	import ShuffleIcon from '@lucide/svelte/icons/shuffle';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
+	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import JsonEditor from './json/JsonEditor.svelte';
+	import ColorComponent from './color/Color.svelte';
 
 	import TextPreview from './TextPreview.svelte';
 	import DescriptionPreview from './DescriptionPreview.svelte';
@@ -53,50 +55,51 @@
 	}
 </script>
 
-<div class="m-auto max-w-2xl">
-	<div class="h-full px-6">
-		<div>
-			<div class="flex items-center justify-end py-1">
-				{#if dev}
-					<button class="btn-icon-ghost" data-tooltip="Random">
-						<ShuffleIcon />
-					</button>
-				{/if}
-				<HistoryButton {historySelected} />
-			</div>
-			<textarea
-				bind:value={inputText}
-				onpaste={onPaste}
-				placeholder="Paste json/timestamp/color etc here to get quick preview"
-				class="textarea h-32"
-			></textarea>
-			<div class="preview-wrapper">
-				{#if preview?.type === 'text'}
-					<TextPreview value={preview.value} />
-				{:else if preview?.type === 'description'}
-					<DescriptionPreview value={preview.value} />
-				{:else if preview?.type === 'json'}
-					<JsonEditor jsonObj={preview.value} readonly>
-						{#snippet header()}
+<div class="m-auto max-w-2xl px-6">
+	<div>
+		<div class="flex items-center justify-end py-1">
+			{#if dev}
+				<button class="btn-icon-ghost" data-tooltip="Random">
+					<ShuffleIcon />
+				</button>
+			{/if}
+			<HistoryButton {historySelected} />
+		</div>
+		<textarea
+			bind:value={inputText}
+			onpaste={onPaste}
+			placeholder="Paste json/timestamp/color etc here to get quick preview"
+			class="textarea h-32"
+		></textarea>
+		<div class="preview-wrapper mt-4">
+			{#if preview?.type === 'text'}
+				<TextPreview value={preview.value} />
+			{:else if preview?.type === 'description'}
+				<DescriptionPreview value={preview.value} />
+			{:else if preview?.type === 'color'}
+				<ColorComponent color={preview.value} />
+			{:else if preview?.type === 'json'}
+				<JsonEditor jsonObj={preview.value} readonly>
+					{#snippet header()}
+						<a
+							href="/json"
+							class="btn-link text-sm"
+							data-tooltip="Advanced mode"
+							{@attach beforeLinkOpen(saveState)}
+						>
 							<span class="text-lg font-semibold">JSON</span>
-							<a
-								href="/json"
-								class="link link-primary link-hover text-sm"
-								{@attach beforeLinkOpen(saveState)}
-							>
-								Advanced mode
-							</a>
-						{/snippet}
-					</JsonEditor>
-				{:else if trimmedInputText.length !== 0 && preview === null}
-					<UnknownPreview />
-				{/if}
-			</div>
+							<ExternalLinkIcon class="size-4" />
+						</a>
+					{/snippet}
+				</JsonEditor>
+			{:else if trimmedInputText.length !== 0 && preview === null}
+				<UnknownPreview />
+			{/if}
 		</div>
+	</div>
 
-		<div class="mt-6">
-			<Tools />
-		</div>
+	<div class="mt-6">
+		<Tools />
 	</div>
 </div>
 

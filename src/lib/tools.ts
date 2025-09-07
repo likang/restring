@@ -21,7 +21,7 @@ export const allTools = [
 	},
 
 	{
-		href: '#',
+		href: '/color',
 		title: 'Color',
 		icon: ColorIcon
 	},

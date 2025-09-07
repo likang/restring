@@ -9,8 +9,8 @@
 	);
 </script>
 
-<div class="mb-6 flex items-center gap-2">
-	<h3>Advanced Tools</h3>
+<div class="mb-6">
+	<h3 class="px-3 text-lg font-semibold">Advanced Tools</h3>
 </div>
 
 <ul class="mb-6 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-3">

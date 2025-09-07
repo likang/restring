@@ -3,17 +3,19 @@
 	import DoneIcon from '@lucide/svelte/icons/check-check';
 	import { onDestroy } from 'svelte';
 
+	type TextCallback = () => string;
+
 	let {
 		text,
 		class: className = 'btn-icon-ghost',
 		tooltip
-	}: { text: string; class?: string; tooltip?: string } = $props();
+	}: { text: string | TextCallback; class?: string; tooltip?: string } = $props();
 
 	let isCopied = $state(false);
 	let timeoutId: number | undefined;
 
 	function handleClick() {
-		navigator.clipboard.writeText(text);
+		navigator.clipboard.writeText(typeof text === 'function' ? text() : text);
 
 		isCopied = true;
 
