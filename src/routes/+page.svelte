@@ -4,12 +4,6 @@
 	import { unshiftHistory } from '$lib/history';
 	import ShuffleIcon from '@lucide/svelte/icons/shuffle';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
-	import JsonComponent from './json/JsonPreview.svelte';
-	import ColorComponent from './color/ColorPreview.svelte';
-
-	import TextPreview from './TextPreview.svelte';
-	import DescriptionPreview from './DescriptionPreview.svelte';
-	import UnknownPreview from './UnknownPreview.svelte';
 	import Tools from './Tools.svelte';
 	import { globalStates } from './state.svelte';
 
@@ -28,6 +22,10 @@
 			}
 		}, 0);
 	}
+
+	let PreviewComponent = $derived(globalStates.preview?.component);
+
+	// $inspect(globalStates.preview?.component);
 </script>
 
 <div class="m-auto max-w-2xl px-6">
@@ -47,16 +45,8 @@
 			class="textarea h-32"
 		></textarea>
 		<div class="preview-wrapper mt-4">
-			{#if globalStates.preview?.type === 'text'}
-				<TextPreview value={globalStates.preview.value} />
-			{:else if globalStates.preview?.type === 'description'}
-				<DescriptionPreview value={globalStates.preview.value} />
-			{:else if globalStates.preview?.type === 'color'}
-				<ColorComponent />
-			{:else if globalStates.preview?.type === 'json'}
-				<JsonComponent />
-			{:else if globalStates.trimmedInputText.length !== 0 && globalStates.preview === null}
-				<UnknownPreview />
+			{#if PreviewComponent}
+				<PreviewComponent />
 			{/if}
 		</div>
 	</div>

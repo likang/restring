@@ -7,7 +7,7 @@
 	import { untrack } from 'svelte';
 
 	$effect(() => {
-		const value = globalStates.preview?.type === 'json' ? globalStates.preview.value : undefined;
+		const value = globalStates.preview?.name === 'json' ? globalStates.preview.value : undefined;
 		if (value) {
 			untrack(() => {
 				states.obj = value.obj;

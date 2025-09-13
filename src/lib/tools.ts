@@ -15,7 +15,7 @@ export const allTools = [
 		icon: JsonIcon
 	},
 	{
-		href: '#',
+		href: '/datetime',
 		title: 'Date/Time',
 		icon: TimeIcon
 	},
@@ -26,7 +26,7 @@ export const allTools = [
 		icon: ColorIcon
 	},
 	{
-		href: '#',
+		href: '/base64',
 		title: 'Base64',
 		icon: Base64Icon
 	},

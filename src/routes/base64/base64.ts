@@ -1,14 +1,17 @@
-import type { IParse } from '$lib/types';
-import { base64ToText } from '$lib/base64';
+import type { PreviewConfig } from '$lib/types';
+import { base64Decode } from '$lib/base64';
+import Base64Preview from './Base64Preview.svelte';
 
-export const guessBase64: IParse = (input) => {
-	if (input.length < 4) {
-		// btoa("a") = "YQ=="
-		return null;
-	}
-	const text = base64ToText(input);
-	if (text === null) {
-		return null;
-	}
-	return { type: 'text', value: text };
-};
+export default function base64(): PreviewConfig {
+	return {
+		name: 'base64',
+		component: Base64Preview,
+		parse(input: string): string | undefined {
+			if (input.length < 4) {
+				// btoa("a") = "YQ=="
+				return undefined;
+			}
+			return base64Decode(input);
+		}
+	};
+}

@@ -1,19 +1,13 @@
-import type { Colord } from 'colord';
+import type { Component } from 'svelte';
 
-export type DescriptionItem = {
-	label: string;
-	value?: string;
+export type PreviewConfig = {
+	name: string;
+	component: Component;
+	parse(input: string): any;
 };
 
-export type JsonPreview = { type: 'json'; value: { obj: any; txt: string } };
-export type TextPreview = { type: 'text'; value: string };
-export type DescriptionPreview = { type: 'description'; value: DescriptionItem[] };
-export type ImagePreview = { type: 'image'; value: string };
-export type ColorPreview = { type: 'color'; value: Colord };
-
-// Define discriminated union type for previews
-export type Preview = JsonPreview | TextPreview | DescriptionPreview | ImagePreview | ColorPreview;
-
-export interface IParse {
-	(input: string): Preview | null;
-}
+export type Preview = {
+	name: string;
+	component: Component;
+	value: any;
+};

@@ -1,25 +1,30 @@
-import { guessJSON } from './json/json';
-import { guessUrl } from './url/url';
-import { guessDate } from './datetime/datetime';
-import { guessColor } from './color/color';
-import { guessBase64 } from './base64/base64';
-import { guessJwt } from './jwt/jwt';
+import type { PreviewConfig, Preview } from '$lib/types';
+
+import json from './json/json';
+import datetime from './datetime/datetime';
+import color from './color/color';
+import base64 from './base64/base64';
+
+import UnknownPreview from './UnknownPreview.svelte';
 
 class States {
 	inputText: string = $state('');
 
-	trimmedInputText = $derived(this.inputText.trim());
+	trimmedInputText: string = $derived(this.inputText.trim());
 
-	preview = $derived.by(() => {
-		if (this.trimmedInputText.length === 0) return null;
-		// guessUrl should be before guessDate, because http://example.com/?a=1 can be parsed as a Date by new Date()
-		for (const parser of [guessJSON, guessUrl, guessDate, guessColor, guessBase64, guessJwt]) {
-			let result = parser(this.trimmedInputText);
+	preview: Preview | undefined = $derived.by(() => {
+		const previewers: PreviewConfig[] = [json(), datetime(), color(), base64()];
+
+		if (this.trimmedInputText.length === 0) {
+			return undefined;
+		}
+		for (const previewer of previewers) {
+			let result = previewer.parse(this.trimmedInputText);
 			if (result) {
-				return result;
+				return { name: previewer.name, component: previewer.component, value: result };
 			}
 		}
-		return null;
+		return { name: 'unknown', component: UnknownPreview, value: undefined };
 	});
 
 	reset() {

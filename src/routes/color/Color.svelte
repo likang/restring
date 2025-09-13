@@ -2,7 +2,7 @@
 	import type { Snippet } from 'svelte';
 
 	import CopyButton from '$lib/components/CopyButton.svelte';
-	import { colord, getFormat } from './color';
+	import { colord, getFormat } from 'colord';
 	import { states, setColor, type Source } from './state.svelte';
 
 	let { header }: { header?: Snippet } = $props();

@@ -6,7 +6,7 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 
 	$effect(() => {
-		const color = globalStates.preview?.type === 'color' ? globalStates.preview.value : undefined;
+		const color = globalStates.preview?.name === 'color' ? globalStates.preview.value : undefined;
 		if (color) {
 			untrack(() => {
 				setColor(color);
