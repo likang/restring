@@ -46,7 +46,7 @@ export const allTools = [
 		icon: RegexIcon
 	},
 	{
-		href: '#',
+		href: '/jwt',
 		title: 'JWT',
 		icon: JwtIcon
 	},

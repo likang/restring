@@ -24,8 +24,6 @@
 	}
 
 	let PreviewComponent = $derived(globalStates.preview?.component);
-
-	// $inspect(globalStates.preview?.component);
 </script>
 
 <div class="m-auto max-w-2xl px-6">

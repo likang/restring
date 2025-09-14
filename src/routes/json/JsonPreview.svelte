@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
-	import JsonEditor from './JsonEditor.svelte';
+	import JsonEditor from '$lib/components/JsonEditor.svelte';
 
 	import { globalStates } from '../state.svelte';
 	import { states } from './state.svelte';

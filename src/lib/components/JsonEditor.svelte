@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { EditorView } from 'codemirror';
-	import { json } from './json-lang';
+	import { json } from '$lib/json/json-lang';
 
 	import { mode } from 'mode-watcher';
 
@@ -60,7 +60,7 @@
 	import CheckIcon from '@lucide/svelte/icons/check';
 
 	import { unshiftHistory } from '$lib/history';
-	import { HISTORY_KEY_JSON } from './json';
+	import { HISTORY_KEY_JSON } from '../../routes/json/json';
 
 	let cmContainer: HTMLDivElement;
 	let headerContainer: HTMLDivElement;
@@ -77,6 +77,7 @@
 		compact = false,
 		textOverflow = false,
 		readonly = false,
+		uniToolbar = false,
 		onDocChanged,
 		header
 	}: {
@@ -85,6 +86,7 @@
 		compact?: boolean;
 		textOverflow?: boolean;
 		readonly?: boolean;
+		uniToolbar?: boolean;
 		onDocChanged?: (txt: string) => void;
 		header?: Snippet;
 	} = $props();
@@ -274,14 +276,14 @@
 			</button>
 		</div>
 	</div>
-	<button class="btn-icon-ghost" onclick={handleFindPrevious}>
+	<button class="btn-icon-ghost size-7" onclick={handleFindPrevious}>
 		<ArrowUpIcon />
 	</button>
-	<button class="btn-icon-ghost" onclick={handleFindNext}>
+	<button class="btn-icon-ghost size-7" onclick={handleFindNext}>
 		<ArrowDownIcon />
 	</button>
 	<button
-		class="btn-icon-ghost"
+		class="btn-icon-ghost size-7"
 		onclick={() => {
 			searchOpen = false;
 		}}
@@ -290,8 +292,13 @@
 	</button>
 {/snippet}
 
-<div class="flex min-h-0 flex-col">
-	<div class="flex items-center gap-2 py-1" bind:this={headerContainer}>
+<div class="flex min-h-0 flex-col {uniToolbar ? 'rounded-md bg-[#fafafa] dark:bg-[#282c34]' : ''}">
+	<div
+		class="flex h-11 items-center gap-2 py-1 {uniToolbar
+			? 'border-b border-gray-950/5 dark:border-white/10'
+			: ''}"
+		bind:this={headerContainer}
+	>
 		{@render header?.()}
 		<div class="flex flex-1 items-center justify-end">
 			{#if searchOpen}

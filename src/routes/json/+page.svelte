@@ -1,5 +1,5 @@
 <script lang="ts">
-	import JsonEditor from './JsonEditor.svelte';
+	import JsonEditor from '$lib/components/JsonEditor.svelte';
 	import { states } from './state.svelte';
 
 	const whitespaceRegex = /^\s*$/;
