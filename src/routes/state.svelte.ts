@@ -5,6 +5,7 @@ import datetime from './datetime/datetime';
 import color from './color/color';
 import base64 from './base64/base64';
 import jwt from './jwt/jwt';
+import urlEncoding from './url-encoding/url-encoding';
 
 import UnknownPreview from './UnknownPreview.svelte';
 
@@ -14,7 +15,14 @@ class States {
 	trimmedInputText: string = $derived(this.inputText.trim());
 
 	preview: Preview | undefined = $derived.by(() => {
-		const previewers: PreviewConfig[] = [json(), datetime(), color(), base64(), jwt()];
+		const previewers: PreviewConfig[] = [
+			json(),
+			datetime(),
+			color(),
+			base64(),
+			jwt(),
+			urlEncoding()
+		];
 
 		if (this.trimmedInputText.length === 0) {
 			return undefined;

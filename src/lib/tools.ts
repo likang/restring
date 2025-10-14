@@ -3,7 +3,7 @@ import TimeIcon from '@lucide/svelte/icons/clock';
 import ColorIcon from '@lucide/svelte/icons/palette';
 import Base64Icon from '$lib/components/icons/Base64.svelte';
 import EscapeIcon from '$lib/components/icons/Escape.svelte';
-import UrlIcon from '@lucide/svelte/icons/link';
+import PercentIcon from '@lucide/svelte/icons/percent';
 import RegexIcon from '@lucide/svelte/icons/regex';
 import JwtIcon from '$lib/components/icons/Jwt.svelte';
 import QrCodeIcon from '@lucide/svelte/icons/qr-code';
@@ -36,9 +36,9 @@ export const allTools = [
 		icon: EscapeIcon
 	},
 	{
-		href: '#',
-		title: 'URL',
-		icon: UrlIcon
+		href: '/url-encoding',
+		title: 'URL Encoding',
+		icon: PercentIcon
 	},
 	{
 		href: '#',
