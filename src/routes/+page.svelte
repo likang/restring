@@ -27,8 +27,10 @@
 </script>
 
 <div class="m-auto max-w-2xl px-6">
-	<div>
-		<div class="flex items-center justify-end py-1">
+	<div class="mt-6">
+		<div class="flex items-center py-1">
+			<h3 class="px-2 text-lg font-semibold">Quick Preview</h3>
+			<div class="flex-1"></div>
 			{#if dev}
 				<button class="btn-icon-ghost" data-tooltip="Random">
 					<ShuffleIcon />
@@ -39,8 +41,9 @@
 		<textarea
 			bind:value={globalStates.inputText}
 			onpaste={onPaste}
-			placeholder="Paste json/timestamp/color etc here to get quick preview"
-			class="textarea h-32"
+			spellcheck="false"
+			placeholder="Try json, timestamp, color, base64, jwt, or url-encoded text"
+			class="textarea h-32 font-mono"
 		></textarea>
 		<div class="preview-wrapper mt-4">
 			{#if PreviewComponent}

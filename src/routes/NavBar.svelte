@@ -50,7 +50,7 @@
 				>
 					<a role="menuitem" href="/">
 						<LightingIcon />
-						Auto
+						Quick Preview
 					</a>
 					<hr role="separator" />
 					{#each otherTools as tool (tool.title)}
