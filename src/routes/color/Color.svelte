@@ -19,7 +19,9 @@
 			const value = (event.target as HTMLInputElement).value;
 			if (source !== 'picker') {
 				if (getFormat(value) !== source) {
-					if (value !== '') {
+					if (value === '') {
+						states[source].error = false;
+					} else {
 						states[source].error = true;
 					}
 					return;
