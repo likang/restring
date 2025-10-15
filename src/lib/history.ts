@@ -7,7 +7,8 @@ export function getHistory(key: string = HISTORY_KEY) {
 }
 
 export function unshiftHistory(text: string, key: string = HISTORY_KEY) {
-	if (text.length === 0) {
+	const textLength = text.length;
+	if (textLength === 0 || textLength > 2 ** 12) {
 		return;
 	}
 
