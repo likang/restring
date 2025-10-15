@@ -4,9 +4,11 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
 
 	$effect(() => {
-		const decoded = globalStates.preview?.name === 'base64' ? globalStates.preview.value : undefined;
+		const decoded =
+			globalStates.preview?.name === 'base64' ? globalStates.preview.value : undefined;
 		if (decoded) {
 			untrack(() => {
 				states.txt = decoded;
@@ -27,7 +29,5 @@
 		<div class="flex-1"></div>
 		<CopyButton text={() => states.txt} />
 	</div>
-	<div class="bg-muted min-h-32 rounded-md p-3">
-		{states.txt}
-	</div>
+	<PreviewTextCard text={states.txt} />
 </div>
