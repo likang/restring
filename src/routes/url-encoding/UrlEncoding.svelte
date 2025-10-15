@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import { afterNavigate } from '$app/navigation';
 
 	let txtInput: HTMLTextAreaElement;
 	let encodedInput: HTMLTextAreaElement;
@@ -60,6 +61,14 @@
 			encodedInput.dispatchEvent(event);
 		}
 	}
+
+	afterNavigate(() => {
+		if (states.from === 'txt') {
+			txtInput.focus();
+		} else {
+			encodedInput.focus();
+		}
+	});
 </script>
 
 <div class="mb-6">
