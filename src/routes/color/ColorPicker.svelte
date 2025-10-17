@@ -6,6 +6,7 @@
 		const value = (event.target as HTMLInputElement).value;
 		const color = colord(value);
 		states.color = color.isValid() ? color : undefined;
+		states.inputText = '';
 	}
 
 	$effect(() => {
