@@ -7,6 +7,7 @@
 
 	import SunIcon from '@lucide/svelte/icons/sun';
 	import MoonIcon from '@lucide/svelte/icons/moon';
+	import ShellIcon from '@lucide/svelte/icons/shell';
 
 	import { toggleMode } from 'mode-watcher';
 
@@ -19,14 +20,15 @@
 <div
 	class="flex h-14 w-full items-center gap-2 border-b border-gray-950/5 px-2 dark:border-white/10"
 >
-	<a class="flex flex-row items-center gap-2 text-2xl font-bold" href="/">
+	<a class="flex flex-row items-end gap-1 text-2xl font-bold" href="/">
+		<ShellIcon class="size-7" />
 		<span>
-			<span
-				class="text-blue- font-bold underline decoration-blue-500 decoration-wavy decoration-1 underline-offset-4"
-				>re</span
+			<span class="font-bold underline decoration-wavy decoration-1 underline-offset-4">re</span
 			><span>string</span>
 		</span>
 	</a>
+
+	<div class="flex-1"></div>
 
 	{#if currentTool}
 		<div id={toolsPopoverId} class="dropdown-menu">
@@ -42,7 +44,13 @@
 				{currentTool.title}
 				<DownIcon />
 			</button>
-			<div id={toolsPopoverId + '-popover'} data-popover aria-hidden="true" class="min-w-56">
+			<div
+				id={toolsPopoverId + '-popover'}
+				data-popover
+				data-align="end"
+				aria-hidden="true"
+				class="min-w-56"
+			>
 				<div
 					role="menu"
 					id={toolsPopoverId + '-menu'}
@@ -52,6 +60,7 @@
 						<LightingIcon />
 						Quick Preview
 					</a>
+					<!-- svelte-ignore a11y_no_redundant_roles -->
 					<hr role="separator" />
 					{#each otherTools as tool (tool.title)}
 						<a role="menuitem" href={tool.href}>
@@ -63,7 +72,6 @@
 			</div>
 		</div>
 	{/if}
-	<div class="flex-1"></div>
 
 	<a class="btn-icon-ghost" href="https://github.com/likang/restring" target="_blank">
 		<GithubIcon />
