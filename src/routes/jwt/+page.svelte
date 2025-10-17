@@ -15,6 +15,7 @@
 		placeholder="JSON Web Token (JWT)"
 		oninput={onInput}
 		aria-invalid={states.inputError}
+		spellcheck="false"
 	></textarea>
 	{#if states.value}
 		<Jwt />
