@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { globalStates } from '../state.svelte';
-	import { setColor } from './state.svelte';
+	import { states } from './state.svelte';
 	import { untrack } from 'svelte';
 	import Color from './Color.svelte';
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
@@ -9,13 +9,13 @@
 		const color = globalStates.preview?.name === 'color' ? globalStates.preview.value : undefined;
 		if (color) {
 			untrack(() => {
-				setColor(color);
+				states.color = color;
 			});
 		}
 	});
 </script>
 
-<Color>
+<Color showPicker={true}>
 	{#snippet header()}
 		<div class="py-1">
 			<a href="/color" class="btn-link text-sm">

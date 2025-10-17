@@ -13,8 +13,12 @@ export default function color(): PreviewConfig {
 		name: 'color',
 		component: ColorPreview,
 		parse(input: string) {
-			const color = colord(input);
-			return color.isValid() ? color : undefined;
+			return parseColor(input);
 		}
 	};
+}
+
+export function parseColor(input: string) {
+	const color = colord(input);
+	return color.isValid() ? color : undefined;
 }

@@ -1,43 +1,28 @@
 import type { Colord } from 'colord';
 
-export type Source = 'picker' | 'hex' | 'rgb' | 'hsl' | 'hwb' | 'lch' | 'cmyk';
+class States {
+	inputText: string = $state('');
+	inputTrimmed: string = $derived(this.inputText.trim());
 
-export const states = $state({
-	previewColor: 'transparent',
-	pickerColor: '#ffffff',
-	hex: { value: '', error: false },
-	rgb: { value: '', error: false },
-	hsl: { value: '', error: false },
-	hwb: { value: '', error: false },
-	lch: { value: '', error: false },
-	cmyk: { value: '', error: false }
-});
+	pickerColor: string = $state('#ffffff');
 
-export function setColor(color: Colord, source?: Source) {
-	states.previewColor = color.toHex();
-	states.pickerColor = states.previewColor.substring(0, 7);
-	if (source !== 'hex') {
-		states.hex.value = color.toHex();
-		states.hex.error = false;
-	}
-	if (source !== 'rgb') {
-		states.rgb.value = color.toRgbString();
-		states.rgb.error = false;
-	}
-	if (source !== 'hsl') {
-		states.hsl.value = color.toHslString();
-		states.hsl.error = false;
-	}
-	if (source !== 'hwb') {
-		states.hwb.value = color.toHwbString();
-		states.hwb.error = false;
-	}
-	if (source !== 'lch') {
-		states.lch.value = color.toLchString();
-		states.lch.error = false;
-	}
-	if (source !== 'cmyk') {
-		states.cmyk.value = color.toCmykString();
-		states.cmyk.error = false;
-	}
+	color: Colord | undefined = $state.raw();
+
+	inputError: boolean = $derived(this.inputTrimmed.length > 0 && this.color === undefined);
+
+	previewColor: string = $derived.by(() => {
+		if (this.color === undefined) {
+			return 'transparent';
+		}
+		return this.color.toHex();
+	});
+
+	hex: string = $derived(this.color?.toHex() ?? '');
+	rgb: string = $derived(this.color?.toRgbString() ?? '');
+	hsl: string = $derived(this.color?.toHslString() ?? '');
+	hwb: string = $derived(this.color?.toHwbString() ?? '');
+	lch: string = $derived(this.color?.toLchString() ?? '');
+	cmyk: string = $derived(this.color?.toCmykString() ?? '');
 }
+
+export const states = new States();
