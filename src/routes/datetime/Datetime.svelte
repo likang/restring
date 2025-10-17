@@ -5,32 +5,24 @@
 </script>
 
 {#snippet itemRow(label: string, value: () => string)}
-	<tr>
-		<td class="text-muted-foreground w-px text-right text-xs whitespace-nowrap"> {label} </td>
-		<td class="group px-2 py-1">
-			<div class="flex items-center justify-between">
-				<span>{value()}</span>
-				<CopyButton
-					text={value}
-					class="btn-icon-ghost invisible size-7 rounded-sm group-hover:visible"
-				/>
-			</div>
-		</td>
-	</tr>
+	<div class="text-muted-foreground text-right text-xs whitespace-nowrap">{label}</div>
+	<div class="group hover:bg-muted/50 relative min-h-9 rounded-md p-2">
+		<p class="text-sm">{value()}</p>
+		<CopyButton
+			text={value}
+			class="btn-icon-ghost invisible absolute top-1/2 right-1 size-7 -translate-y-1/2 rounded-sm group-hover:visible"
+		/>
+	</div>
 {/snippet}
 
 <div class="mb-6">
-	{#if states.date}
-		<div class="overflow-x-auto">
-			<table class="table">
-				<tbody>
-					{@render itemRow('Timestamp (s)', () => (states.date!.getTime() / 1000).toString())}
-					{@render itemRow('Timestamp (ms)', () => states.date!.getTime().toString())}
-					{@render itemRow('Local Time', () => states.date!.toLocaleString())}
-					{@render itemRow('UTC Time', () => states.date!.toUTCString())}
-					{@render itemRow('ISO Time', () => states.date!.toISOString())}
-				</tbody>
-			</table>
-		</div>
-	{/if}
+	<div class="grid grid-cols-[auto_1fr] items-center gap-2">
+		{@render itemRow('Unix Epoch', () => states.unixEpoch)}
+		{@render itemRow('Timestamp (ms)', () => states.timestampMs)}
+		{@render itemRow('ISO 8601', () => states.isoTime)}
+		<!--rfc 7231 -->
+		{@render itemRow('HTTP Header', () => states.httpHeader)}
+		<!--rfc 822 -->
+		{@render itemRow('Email/RSS', () => states.emailRss)}
+	</div>
 </div>

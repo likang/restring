@@ -12,29 +12,26 @@ export default function datetime(): PreviewConfig {
 	};
 }
 
+const guessTimeStart = new Date('1991-08-06').getTime();
+const guessTimeEnd = new Date('2038-01-19').getTime();
+
 export function parseDate(input: string): Date | undefined {
-	// todo: =1 .1 /1 is also a valid date
 	var date = new Date(input);
 	if (!isNaN(date.getTime())) {
-		if (input.length < 8) {
-			// a minimal length of datetime string will be like "2025-5-1"
-			return undefined;
+		if (input.length >= '19910806'.length) {
+			return date;
 		}
-		return date;
 	}
-	const numInput = Number(input); // as seconds
-	if (isNaN(numInput)) {
-		return undefined;
+	const numInput = Number(input);
+	if (!isNaN(numInput)) {
+		for (const input of [numInput, numInput * 1000]) {
+			date = new Date(input);
+			let time = date.getTime();
+			if (!isNaN(time) && time >= guessTimeStart && time <= guessTimeEnd) {
+				return date;
+			}
+		}
 	}
-	if (numInput < 1000000000 || numInput > new Date().getTime() / 1000 + 60 * 60 * 24 * 365 * 50) {
-		// as for a guess, a minimal length of timestamp string will be like "1687181773"
-		// and a maximal date will be 50 years from now
-		// user can still use advanced tools to input any legal datetime string
-		return undefined;
-	}
-	date = new Date(numInput * 1000);
-	if (!isNaN(date.getTime())) {
-		return date;
-	}
+
 	return undefined;
 }
