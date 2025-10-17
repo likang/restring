@@ -63,10 +63,12 @@
 	}
 
 	afterNavigate(() => {
-		if (states.from === 'txt') {
-			txtInput.focus();
-		} else {
-			encodedInput.focus();
+		if (states.txt.length > 0 || states.encoded.length > 0) {
+			if (states.from === 'txt') {
+				txtInput.focus();
+			} else {
+				encodedInput.focus();
+			}
 		}
 	});
 </script>
