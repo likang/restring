@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import Base64 from "./Base64.svelte";
 
 </script>
