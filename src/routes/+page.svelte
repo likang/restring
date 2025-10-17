@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { dev } from '$app/environment';
-
 	import { unshiftHistory } from '$lib/history';
-	import ShuffleIcon from '@lucide/svelte/icons/shuffle';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
 	import Tools from './Tools.svelte';
 	import { globalStates } from './state.svelte';
@@ -31,11 +28,6 @@
 		<div class="flex items-center py-1">
 			<h3 class="text-lg font-semibold">Quick Preview</h3>
 			<div class="flex-1"></div>
-			{#if dev}
-				<button class="btn-icon-ghost" data-tooltip="Random">
-					<ShuffleIcon />
-				</button>
-			{/if}
 			<HistoryButton {historySelected} />
 		</div>
 		<textarea
