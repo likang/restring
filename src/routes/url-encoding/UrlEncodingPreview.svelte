@@ -24,7 +24,7 @@
 
 <div class="mb-6">
 	<div class="flex items-center py-1">
-		<a href="/url-encoding" class="btn-link text-sm">
+		<a href="/url-encoding" class="btn-link px-0 text-sm">
 			<span class="text-lg font-semibold">URL Encoding</span>
 			<ExternalLinkIcon class="size-4" />
 		</a>

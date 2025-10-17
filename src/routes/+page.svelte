@@ -29,7 +29,7 @@
 <div class="m-auto max-w-2xl px-6">
 	<div class="mt-6">
 		<div class="flex items-center py-1">
-			<h3 class="px-2 text-lg font-semibold">Quick Preview</h3>
+			<h3 class="text-lg font-semibold">Quick Preview</h3>
 			<div class="flex-1"></div>
 			{#if dev}
 				<button class="btn-icon-ghost" data-tooltip="Random">

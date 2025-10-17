@@ -10,7 +10,7 @@
 </script>
 
 <div class="mb-3">
-	<h3 class="px-3 text-lg font-semibold">Tools</h3>
+	<h3 class="text-lg font-semibold">Tools</h3>
 </div>
 
 <ul class="mb-6 grid grid-flow-row grid-cols-1 gap-2 sm:grid-cols-3">

@@ -18,7 +18,7 @@
 <Color showPicker={true}>
 	{#snippet header()}
 		<div class="py-1">
-			<a href="/color" class="btn-link text-sm">
+			<a href="/color" class="btn-link px-0 text-sm">
 				<span class="text-lg font-semibold">Color</span>
 				<ExternalLinkIcon class="size-4" />
 			</a>
