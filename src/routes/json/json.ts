@@ -1,13 +1,16 @@
-import type { PreviewConfig } from '$lib/types';
+import type { ToolConfig } from '$lib/types';
 import JsonPreview from './JsonPreview.svelte';
+import JsonIcon from '$lib/components/icons/Json.svelte';
 
 export type JsonValue = { obj: any; txt: string };
 
-export default function json(): PreviewConfig {
+export default function json(): ToolConfig {
 	const jsonStartRegex = /^\s*[\{\[]/;
 
 	return {
-		name: 'json',
+		name: 'JSON',
+		icon: JsonIcon,
+		path: '/json',
 		component: JsonPreview,
 		parse(input: string): JsonValue | undefined {
 			if (!jsonStartRegex.test(input)) {

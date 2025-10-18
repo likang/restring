@@ -1,6 +1,7 @@
 import JwtPreview from './JwtPreview.svelte';
-import type { PreviewConfig } from '$lib/types';
+import type { ToolConfig } from '$lib/types';
 import { base64Decode } from '$lib/base64';
+import JwtIcon from '$lib/components/icons/Jwt.svelte';
 
 export type JwtValue = {
 	header: object;
@@ -8,9 +9,11 @@ export type JwtValue = {
 	signature: string;
 };
 
-export default function jwt(): PreviewConfig {
+export default function jwt(): ToolConfig {
 	return {
-		name: 'jwt',
+		name: 'JWT',
+		icon: JwtIcon,
+		path: '/jwt',
 		component: JwtPreview,
 		parse(input: string) {
 			return parseJwt(input);

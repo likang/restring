@@ -1,16 +1,19 @@
-import type { PreviewConfig } from '$lib/types';
+import type { ToolConfig } from '$lib/types';
 import { colord, extend } from 'colord';
 import hwbPlugin from 'colord/plugins/hwb';
 import lchPlugin from 'colord/plugins/lch';
 import cmykPlugin from 'colord/plugins/cmyk';
 
 import ColorPreview from './ColorPreview.svelte';
+import ColorIcon from '@lucide/svelte/icons/palette';
 
 extend([hwbPlugin, lchPlugin, cmykPlugin]);
 
-export default function color(): PreviewConfig {
+export default function color(): ToolConfig {
 	return {
-		name: 'color',
+		name: 'Color',
+		icon: ColorIcon,
+		path: '/color',
 		component: ColorPreview,
 		parse(input: string) {
 			return parseColor(input);

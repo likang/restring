@@ -13,8 +13,8 @@
 
 	const toolsPopoverId = 'popover-nav-bar-tools';
 
-	let currentTool = $derived(allTools.find((tool) => tool.href === page.url.pathname));
-	let otherTools = $derived(allTools.filter((tool) => tool.href !== page.url.pathname));
+	let currentTool = $derived(allTools.find((tool) => tool.path === page.url.pathname));
+	let otherTools = $derived(allTools.filter((tool) => tool.path !== page.url.pathname));
 </script>
 
 <div
@@ -41,7 +41,7 @@
 				class="btn-ghost"
 			>
 				<currentTool.icon />
-				{currentTool.title}
+				{currentTool.name}
 				<DownIcon />
 			</button>
 			<div
@@ -62,10 +62,10 @@
 					</a>
 					<!-- svelte-ignore a11y_no_redundant_roles -->
 					<hr role="separator" />
-					{#each otherTools as tool (tool.title)}
-						<a role="menuitem" href={tool.href}>
+					{#each otherTools as tool (tool.name)}
+						<a role="menuitem" href={tool.path}>
 							<tool.icon />
-							{tool.title}
+							{tool.name}
 						</a>
 					{/each}
 				</div>

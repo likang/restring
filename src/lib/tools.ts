@@ -1,40 +1,17 @@
-import JsonIcon from '$lib/components/icons/Json.svelte';
-import TimeIcon from '@lucide/svelte/icons/clock';
-import ColorIcon from '@lucide/svelte/icons/palette';
-import Base64Icon from '$lib/components/icons/Base64.svelte';
-import PercentIcon from '@lucide/svelte/icons/percent';
-import JwtIcon from '$lib/components/icons/Jwt.svelte';
+import type { ToolConfig } from './types';
 
-export const allTools = [
-	{
-		href: '/json',
-		title: 'JSON',
-		icon: JsonIcon
-	},
-	{
-		href: '/datetime',
-		title: 'Date/Time',
-		icon: TimeIcon
-	},
+import json from '../routes/json/json';
+import datetime from '../routes/datetime/datetime';
+import color from '../routes/color/color';
+import base64 from '../routes/base64/base64';
+import jwt from '../routes/jwt/jwt';
+import urlEncoding from '../routes/url-encoding/url-encoding';
 
-	{
-		href: '/color',
-		title: 'Color',
-		icon: ColorIcon
-	},
-	{
-		href: '/base64',
-		title: 'Base64',
-		icon: Base64Icon
-	},
-	{
-		href: '/url-encoding',
-		title: 'URL Encoding',
-		icon: PercentIcon
-	},
-	{
-		href: '/jwt',
-		title: 'JWT',
-		icon: JwtIcon
-	}
+export const allTools: ToolConfig[] = [
+	json(),
+	datetime(),
+	color(),
+	base64(),
+	jwt(),
+	urlEncoding()
 ];

@@ -1,10 +1,13 @@
-import type { PreviewConfig } from '$lib/types';
+import type { ToolConfig } from '$lib/types';
 
 import DatetimePreview from './DatetimePreview.svelte';
+import TimeIcon from '@lucide/svelte/icons/clock';
 
-export default function datetime(): PreviewConfig {
+export default function datetime(): ToolConfig {
 	return {
-		name: 'datetime',
+		name: 'Date/Time',
+		icon: TimeIcon,
+		path: '/datetime',
 		component: DatetimePreview,
 		parse(input: string): Date | undefined {
 			return parseDate(input);

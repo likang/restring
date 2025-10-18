@@ -1,11 +1,6 @@
-import type { PreviewConfig, Preview } from '$lib/types';
+import type { Preview } from '$lib/types';
 
-import json from './json/json';
-import datetime from './datetime/datetime';
-import color from './color/color';
-import base64 from './base64/base64';
-import jwt from './jwt/jwt';
-import urlEncoding from './url-encoding/url-encoding';
+import { allTools } from '$lib/tools';
 
 class States {
 	inputText: string = $state('');
@@ -13,20 +8,11 @@ class States {
 	trimmedInputText: string = $derived(this.inputText.trim());
 
 	preview: Preview | undefined = $derived.by(() => {
-		const previewers: PreviewConfig[] = [
-			json(),
-			datetime(),
-			color(),
-			base64(),
-			jwt(),
-			urlEncoding()
-		];
-
 		if (this.trimmedInputText.length > 0) {
-			for (const previewer of previewers) {
-				let result = previewer.parse(this.trimmedInputText);
+			for (const tool of allTools) {
+				let result = tool.parse(this.trimmedInputText);
 				if (result) {
-					return { name: previewer.name, component: previewer.component, value: result };
+					return { name: tool.name, component: tool.component, value: result };
 				}
 			}
 		}

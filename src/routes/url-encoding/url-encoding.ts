@@ -1,9 +1,12 @@
-import type { PreviewConfig } from '$lib/types';
+import type { ToolConfig } from '$lib/types';
 import UrlEncodingPreview from './UrlEncodingPreview.svelte';
+import PercentIcon from '@lucide/svelte/icons/percent';
 
-export default function urlEncoding(): PreviewConfig {
+export default function urlEncoding(): ToolConfig {
 	return {
-		name: 'url-encoding',
+		name: 'URL Encoding',
+		icon: PercentIcon,
+		path: '/url-encoding',
 		component: UrlEncodingPreview,
 		parse(input: string): string | undefined {
 			if (!/^https?:\/\//i.test(input)) {
