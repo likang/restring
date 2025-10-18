@@ -32,27 +32,38 @@ class States {
 		if (this.date === undefined) {
 			return '';
 		}
-		const offset = -this.date.getTimezoneOffset();
-		const offsetHours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0');
-		const offsetMinutes = String(Math.abs(offset) % 60).padStart(2, '0');
-		const offsetSign = offset >= 0 ? '+' : '-';
-		const timezone = `${offsetSign}${offsetHours}${offsetMinutes}`;
 
 		const date = new Date(this.date.getTime() - this.date.getTimezoneOffset() * 60 * 1000);
-		return date.toUTCString().replace('GMT', timezone);
+		return date.toUTCString().replace('GMT', getTimezoneString(this.date, ''));
 	});
 
-	isoTime: string = $derived.by(() => {
+	iso: string = $derived.by(() => {
 		if (this.date === undefined) {
 			return '';
 		}
 		return this.date.toISOString();
 	});
 
+	isoTimezone: string = $derived.by(() => {
+		if (this.date === undefined) {
+			return '';
+		}
+		const date = new Date(this.date.getTime() - this.date.getTimezoneOffset() * 60 * 1000);
+		return date.toISOString().replace('Z', getTimezoneString(this.date, ':'));
+	});
+
 	setNow() {
 		this.date = new Date();
 		this.inputText = '';
 	}
+}
+
+function getTimezoneString(date: Date, separator: string): string {
+	const offset = -date.getTimezoneOffset();
+	const offsetHours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, '0');
+	const offsetMinutes = String(Math.abs(offset) % 60).padStart(2, '0');
+	const offsetSign = offset >= 0 ? '+' : '-';
+	return `${offsetSign}${offsetHours}${separator}${offsetMinutes}`;
 }
 
 export const states = new States();
