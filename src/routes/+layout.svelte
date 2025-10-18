@@ -7,10 +7,10 @@
 	let { children } = $props();
 
 	onMount(async () => {
-		// Suppress monkey patching of history API by basecoat (see node_modules/basecoat-css/dist/js/all.js)
-		window.history.__basecoatPatched = true;
 		// @ts-ignore
-		await import('basecoat-css/all');
+		await import('basecoat-css/basecoat');
+		// @ts-ignore
+		await import('basecoat-css/dropdown-menu');
 		(window as any).basecoat.initAll();
 		(window as any).basecoat.start();
 	});
