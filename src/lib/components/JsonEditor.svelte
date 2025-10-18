@@ -251,6 +251,18 @@
 		});
 		unshiftHistory(his, HISTORY_KEY_JSON);
 	}
+	function downloadJson() {
+		const jsonStr = editorView?.state?.doc?.toString() ?? '';
+		const blob = new Blob([jsonStr], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = 'data.json';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+	}
 </script>
 
 {#snippet searchBar()}
@@ -360,7 +372,7 @@
 
 								Text Wrap
 							</button>
-							<button role="menuitem">
+							<button role="menuitem" onclick={downloadJson}>
 								<DownloadIcon />
 								Download
 							</button>
