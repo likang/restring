@@ -7,8 +7,6 @@ import base64 from './base64/base64';
 import jwt from './jwt/jwt';
 import urlEncoding from './url-encoding/url-encoding';
 
-import UnknownPreview from './UnknownPreview.svelte';
-
 class States {
 	inputText: string = $state('');
 
@@ -24,16 +22,15 @@ class States {
 			urlEncoding()
 		];
 
-		if (this.trimmedInputText.length === 0) {
-			return undefined;
-		}
-		for (const previewer of previewers) {
-			let result = previewer.parse(this.trimmedInputText);
-			if (result) {
-				return { name: previewer.name, component: previewer.component, value: result };
+		if (this.trimmedInputText.length > 0) {
+			for (const previewer of previewers) {
+				let result = previewer.parse(this.trimmedInputText);
+				if (result) {
+					return { name: previewer.name, component: previewer.component, value: result };
+				}
 			}
 		}
-		return { name: 'unknown', component: UnknownPreview, value: undefined };
+		return undefined;
 	});
 
 	reset() {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { unshiftHistory } from '$lib/history';
 	import HistoryButton from '$lib/components/HistoryButton.svelte';
+	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
 	import Tools from './Tools.svelte';
 	import { globalStates } from './state.svelte';
 
@@ -44,6 +45,12 @@
 		<div class="preview-wrapper mt-4">
 			{#if PreviewComponent}
 				<PreviewComponent />
+			{:else if globalStates.trimmedInputText.length > 0}
+				<PreviewTextCard>
+					<p class="text-muted-foreground flex min-h-30 items-center justify-center">
+						No preview is available.
+					</p>
+				</PreviewTextCard>
 			{/if}
 		</div>
 	</div>
