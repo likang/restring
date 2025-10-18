@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-	<title>restring - Fast Text Formatter and Viewer</title>
+	<title>restring - Fast and Smart String Tool</title>
 	<meta
 		name="description"
 		content="Format, view, and convert JSON, timestamps, colors, base64, JWT, URL-encoded text online."
