@@ -28,6 +28,18 @@
 	let PreviewComponent = $derived(globalStates.preview?.component);
 </script>
 
+<svelte:head>
+	<title>restring - Fast Text Formatter and Viewer</title>
+	<meta
+		name="description"
+		content="Format, view, and convert JSON, timestamps, colors, base64, JWT, URL-encoded text online."
+	/>
+	<meta
+		name="keywords"
+		content="json, timestamp, color, base64, jwt, url-encode, formatter, viewer, online tool, restring"
+	/>
+</svelte:head>
+
 <div class="m-auto max-w-2xl px-6">
 	<div class="mt-6">
 		<div class="flex items-center py-1">

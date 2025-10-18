@@ -53,6 +53,18 @@
 	});
 </script>
 
+<svelte:head>
+	<title>restring - Date &amp; Time Converter</title>
+	<meta
+		name="description"
+		content="Convert between Unix epoch, ISO 8601, UTC, email/RSS, and HTTP header date/time formats online."
+	/>
+	<meta
+		name="keywords"
+		content="datetime, date converter, time converter, ISO 8601, UTC, timezone, Unix epoch, timestamp, email date, RSS date, http header date, date online tool, restring"
+	/>
+</svelte:head>
+
 <div class="m-auto max-w-2xl px-6 pt-6">
 	<div class="mb-6 flex flex-row gap-2">
 		<input

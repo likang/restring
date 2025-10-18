@@ -19,6 +19,11 @@
 	}
 </script>
 
+<svelte:head>
+	<title>restring - JSON Formatter and Viewer</title>
+	<meta name="description" content="Easily format, view, and edit your JSON online." />
+</svelte:head>
+
 <div
 	class="json-wrapper grid h-[calc(100vh-(var(--spacing)*14))] grid-cols-1 gap-2 px-2 md:grid-cols-2"
 >
