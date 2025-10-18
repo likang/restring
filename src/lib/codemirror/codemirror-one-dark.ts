@@ -64,7 +64,6 @@ export const oneDarkTheme = EditorView.theme(
 			backgroundColor: darkBackground,
 			border: 'none',
 			color: ivory,
-			boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.36)'
 		},
 
 		'.cm-searchMatch': {

@@ -63,8 +63,7 @@ export const oneLightTheme = EditorView.theme(
 		'.cm-panels': {
 			backgroundColor: darkBackground,
 			border: 'none',
-			color: ivory,
-			boxShadow: '0 0 8px 2px rgba(0, 0, 0, 0.16)'
+			color: ivory
 		},
 
 		'.cm-searchMatch': {
