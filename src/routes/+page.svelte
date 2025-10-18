@@ -14,7 +14,11 @@
 	function onPaste(event: ClipboardEvent) {
 		const pastedText = event.clipboardData?.getData('text') ?? '';
 		setTimeout(() => {
-			if (pastedText.length === globalStates.inputText.length) {
+			if (
+				pastedText.length === globalStates.inputText.length &&
+				globalStates.preview !== undefined &&
+				globalStates.preview.name !== 'unknown'
+			) {
 				unshiftHistory(globalStates.trimmedInputText);
 			}
 		}, 0);
