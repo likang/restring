@@ -6,14 +6,12 @@
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
 	import urlEncodingTool from './url-encoding';
-	import { isPreviewForTool } from '$lib/types';
+	import { previewValueOfTool } from '$lib/types';
 
 	$effect(() => {
-		if (isPreviewForTool(globalStates.preview, urlEncodingTool)) {
-			const preview = globalStates.preview;
+		const value = previewValueOfTool(globalStates.preview, urlEncodingTool);
+		if (value) {
 			untrack(() => {
-				const value = preview.value;
-
 				states.type = 'uri';
 				if (value.type === 'encoded') {
 					states.encoded = value.content;

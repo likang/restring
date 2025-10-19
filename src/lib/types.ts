@@ -13,9 +13,9 @@ export type Preview<T> = {
 	value: T;
 };
 
-export function isPreviewForTool<T>(
+export function previewValueOfTool<T>(
 	preview: Preview<any> | undefined,
 	tool: Tool<T>
-): preview is Preview<T> {
-	return preview?.tool === tool;
+): T | undefined {
+	return preview?.tool === tool ? preview.value : undefined;
 }

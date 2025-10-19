@@ -6,13 +6,12 @@
 	import { states } from './state.svelte';
 	import { untrack } from 'svelte';
 	import jsonTool from './json';
-	import { isPreviewForTool } from '$lib/types';
+	import { previewValueOfTool } from '$lib/types';
 
 	$effect(() => {
-		if (isPreviewForTool(globalStates.preview, jsonTool)) {
-			const preview = globalStates.preview;
+		const value = previewValueOfTool(globalStates.preview, jsonTool);
+		if (value) {
 			untrack(() => {
-				const value = preview.value;
 				states.obj = value.obj;
 				states.txt = value.txt;
 			});

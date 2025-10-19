@@ -5,14 +5,14 @@
 	import { states } from './state.svelte';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
 	import jwtTool from './jwt';
-	import { isPreviewForTool } from '$lib/types';
+	import { previewValueOfTool } from '$lib/types';
 
 	$effect(() => {
-		if (isPreviewForTool(globalStates.preview, jwtTool)) {
-			const preview = globalStates.preview;
+		const value = previewValueOfTool(globalStates.preview, jwtTool);
+		if (value) {
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
-				states.value = preview.value;
+				states.value = value;
 			});
 		}
 	});

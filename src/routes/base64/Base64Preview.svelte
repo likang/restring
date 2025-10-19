@@ -6,13 +6,13 @@
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
 	import base64Tool from './base64';
-	import { isPreviewForTool } from '$lib/types';
+	import { previewValueOfTool } from '$lib/types';
 
 	$effect(() => {
-		if (isPreviewForTool(globalStates.preview, base64Tool)) {
-			const preview = globalStates.preview;
+		const value = previewValueOfTool(globalStates.preview, base64Tool);
+		if (value) {
 			untrack(() => {
-				states.txt = preview.value;
+				states.txt = value;
 				states.encoded = globalStates.trimmedInput;
 				states.txtError = false;
 				states.encodedError = false;
