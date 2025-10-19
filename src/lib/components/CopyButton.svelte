@@ -12,7 +12,7 @@
 	}: { text: string | TextCallback; class?: string; tooltip?: string } = $props();
 
 	let isCopied = $state(false);
-	let timeoutId: number | undefined;
+	let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
 	function handleClick() {
 		navigator.clipboard.writeText(typeof text === 'function' ? text() : text);

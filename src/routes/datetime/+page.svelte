@@ -4,7 +4,7 @@
 	import { onDestroy } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
 
-	let intervalId: number | undefined = undefined;
+	let intervalId: ReturnType<typeof setInterval> | undefined = undefined;
 
 	function onInput(event: Event) {
 		if (states.inputTrimmed.length === 0) {
