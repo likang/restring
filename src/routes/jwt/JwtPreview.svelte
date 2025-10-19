@@ -19,8 +19,8 @@
 </script>
 
 <div class="py-1">
-	<a href="/jwt" class="btn-link px-0 text-sm">
-		<span class="text-lg font-semibold">JWT</span>
+	<a href={jwtTool.path} class="btn-link px-0 text-sm">
+		<span class="text-lg font-semibold">{jwtTool.name}</span>
 		<ExternalLinkIcon class="size-4" />
 	</a>
 </div>

@@ -23,8 +23,8 @@
 
 <div class="mb-6">
 	<div class="flex items-center py-1">
-		<a href="/base64" class="btn-link px-0 text-sm">
-			<span class="text-lg font-semibold">Base64</span>
+		<a href={base64Tool.path} class="btn-link px-0 text-sm">
+			<span class="text-lg font-semibold">{base64Tool.name}</span>
 			<ExternalLinkIcon class="size-4" />
 		</a>
 		<div class="flex-1"></div>

@@ -21,8 +21,8 @@
 
 <JsonEditor obj={states.obj} readonly>
 	{#snippet header()}
-		<a href="/json" class="btn-link px-0 text-sm">
-			<span class="text-lg font-semibold">JSON</span>
+		<a href={jsonTool.path} class="btn-link px-0 text-sm">
+			<span class="text-lg font-semibold">{jsonTool.name}</span>
 			<ExternalLinkIcon class="size-4" />
 		</a>
 	{/snippet}
