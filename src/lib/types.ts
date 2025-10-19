@@ -8,8 +8,7 @@ export type Tool<T> = {
 	guess(input: string): T | undefined;
 };
 
-export type Preview = {
-	name: string;
-	component: Component;
-	value: any;
+export type Preview<T> = {
+	tool: Tool<T>;
+	value: T;
 };

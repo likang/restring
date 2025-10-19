@@ -8,7 +8,7 @@
 	import base64Tool from './base64';
 
 	$effect(() => {
-		if (globalStates.preview?.name === base64Tool.name) {
+		if (globalStates.preview?.tool === base64Tool) {
 			untrack(() => {
 				states.txt = globalStates.preview!.value;
 				states.encoded = globalStates.trimmedInput;

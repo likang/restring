@@ -9,7 +9,7 @@
 	import type { JsonValue } from './json';
 
 	$effect(() => {
-		if (globalStates.preview?.name === jsonTool.name) {
+		if (globalStates.preview?.tool === jsonTool) {
 			untrack(() => {
 				const value: JsonValue = globalStates.preview!.value;
 				states.obj = value.obj;

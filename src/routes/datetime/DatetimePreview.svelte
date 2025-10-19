@@ -7,7 +7,7 @@
 	import datetimeTool from './datetime';
 
 	$effect(() => {
-		if (globalStates.preview?.name === datetimeTool.name) {
+		if (globalStates.preview?.tool === datetimeTool) {
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
 				states.date = globalStates.preview!.value;

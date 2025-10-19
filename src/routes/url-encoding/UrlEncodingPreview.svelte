@@ -9,7 +9,7 @@
 	import urlEncodingTool from './url-encoding';
 
 	$effect(() => {
-		if (globalStates.preview?.name === urlEncodingTool.name) {
+		if (globalStates.preview?.tool === urlEncodingTool) {
 			untrack(() => {
 				const value: UrlEncodingPreviewValue = globalStates.preview!.value;
 

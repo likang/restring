@@ -15,17 +15,13 @@
 	function onPaste(event: ClipboardEvent) {
 		const pastedText = event.clipboardData?.getData('text') ?? '';
 		setTimeout(() => {
-			if (
-				pastedText.length === globalStates.input.length &&
-				globalStates.preview !== undefined &&
-				globalStates.preview.name !== 'unknown'
-			) {
+			if (pastedText.length === globalStates.input.length && globalStates.preview !== undefined) {
 				unshiftHistory(globalStates.trimmedInput);
 			}
 		}, 0);
 	}
 
-	let PreviewComponent = $derived(globalStates.preview?.component);
+	let PreviewComponent = $derived(globalStates.preview?.tool.preview);
 </script>
 
 <svelte:head>

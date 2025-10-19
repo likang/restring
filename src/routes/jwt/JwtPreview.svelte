@@ -7,7 +7,7 @@
 	import jwtTool from './jwt';
 
 	$effect(() => {
-		if (globalStates.preview?.name === jwtTool.name) {
+		if (globalStates.preview?.tool === jwtTool) {
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
 				states.value = globalStates.preview!.value;

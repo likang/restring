@@ -7,7 +7,7 @@
 	import colorTool from './color';
 
 	$effect(() => {
-		if (globalStates.preview?.name === colorTool.name) {
+		if (globalStates.preview?.tool === colorTool) {
 			untrack(() => {
 				states.color = globalStates.preview!.value;
 			});
