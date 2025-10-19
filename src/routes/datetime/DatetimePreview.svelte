@@ -5,12 +5,14 @@
 	import { states } from './state.svelte';
 	import Datetime from './Datetime.svelte';
 	import datetimeTool from './datetime';
+	import { isPreviewForTool } from '$lib/types';
 
 	$effect(() => {
-		if (globalStates.preview?.tool === datetimeTool) {
+		if (isPreviewForTool(globalStates.preview, datetimeTool)) {
+			const preview = globalStates.preview;
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
-				states.date = globalStates.preview!.value;
+				states.date = preview.value;
 			});
 		}
 	});

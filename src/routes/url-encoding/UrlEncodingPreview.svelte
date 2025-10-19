@@ -5,13 +5,14 @@
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
-	import type { UrlEncodingPreviewValue } from './url-encoding';
 	import urlEncodingTool from './url-encoding';
+	import { isPreviewForTool } from '$lib/types';
 
 	$effect(() => {
-		if (globalStates.preview?.tool === urlEncodingTool) {
+		if (isPreviewForTool(globalStates.preview, urlEncodingTool)) {
+			const preview = globalStates.preview;
 			untrack(() => {
-				const value: UrlEncodingPreviewValue = globalStates.preview!.value;
+				const value = preview.value;
 
 				states.type = 'uri';
 				if (value.type === 'encoded') {

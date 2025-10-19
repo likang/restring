@@ -5,11 +5,13 @@
 	import Color from './Color.svelte';
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import colorTool from './color';
+	import { isPreviewForTool } from '$lib/types';
 
 	$effect(() => {
-		if (globalStates.preview?.tool === colorTool) {
+		if (isPreviewForTool(globalStates.preview, colorTool)) {
+			const preview = globalStates.preview;
 			untrack(() => {
-				states.color = globalStates.preview!.value;
+				states.color = preview.value;
 			});
 		}
 	});
