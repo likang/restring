@@ -15,17 +15,11 @@ class States {
 	});
 
 	timestampMs: string = $derived.by(() => {
-		if (this.date === undefined) {
-			return '';
-		}
-		return this.date.getTime().toString();
+		return this.date?.getTime().toString() ?? '';
 	});
 
 	httpHeader: string = $derived.by(() => {
-		if (this.date === undefined) {
-			return '';
-		}
-		return this.date.toUTCString();
+		return this.date?.toUTCString() ?? '';
 	});
 
 	emailRss: string = $derived.by(() => {
@@ -38,10 +32,7 @@ class States {
 	});
 
 	iso: string = $derived.by(() => {
-		if (this.date === undefined) {
-			return '';
-		}
-		return this.date.toISOString();
+		return this.date?.toISOString() ?? '';
 	});
 
 	isoTimezone: string = $derived.by(() => {
