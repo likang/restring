@@ -4,10 +4,10 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { states } from './state.svelte';
 	import Datetime from './Datetime.svelte';
-	import { tool } from './datetime';
+	import datetimeTool from './datetime';
 
 	$effect(() => {
-		if (globalStates.preview?.name === tool.name) {
+		if (globalStates.preview?.name === datetimeTool.name) {
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
 				states.date = globalStates.preview!.value;

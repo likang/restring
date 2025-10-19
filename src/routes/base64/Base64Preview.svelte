@@ -5,10 +5,10 @@
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
-	import { tool } from './base64';
+	import base64Tool from './base64';
 
 	$effect(() => {
-		if (globalStates.preview?.name === tool.name) {
+		if (globalStates.preview?.name === base64Tool.name) {
 			untrack(() => {
 				states.txt = globalStates.preview!.value;
 				states.encoded = globalStates.trimmedInput;

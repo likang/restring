@@ -1,9 +1,9 @@
-import type { Tool } from '$lib/types';
 import { base64Decode } from '$lib/base64';
 import Base64Preview from './Base64Preview.svelte';
 import Base64Icon from '$lib/components/icons/Base64.svelte';
+import { defineTool } from '$lib/tools';
 
-export const tool: Tool = {
+export default defineTool({
 	name: 'Base64',
 	icon: Base64Icon,
 	path: '/base64',
@@ -15,4 +15,4 @@ export const tool: Tool = {
 		}
 		return base64Decode(input);
 	}
-};
+});

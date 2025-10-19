@@ -4,11 +4,10 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { states } from './state.svelte';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
-	import { tool } from './jwt';
-	import type { JwtValue } from './jwt';
+	import jwtTool from './jwt';
 
 	$effect(() => {
-		if (globalStates.preview?.name === tool.name) {
+		if (globalStates.preview?.name === jwtTool.name) {
 			untrack(() => {
 				states.inputText = globalStates.trimmedInput;
 				states.value = globalStates.preview!.value;

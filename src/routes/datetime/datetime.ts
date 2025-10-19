@@ -1,9 +1,9 @@
-import type { Tool } from '$lib/types';
+import { defineTool } from '$lib/tools';
 
 import DatetimePreview from './DatetimePreview.svelte';
 import TimeIcon from '@lucide/svelte/icons/clock';
 
-export const tool: Tool = {
+export default defineTool({
 	name: 'Date/Time',
 	icon: TimeIcon,
 	path: '/datetime',
@@ -11,7 +11,7 @@ export const tool: Tool = {
 	guess(input: string): Date | undefined {
 		return parseDate(input);
 	}
-};
+});
 
 const guessTimeStart = new Date('1991-08-06').getTime();
 const guessTimeEnd = new Date('2038-01-19').getTime();

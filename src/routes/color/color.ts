@@ -1,4 +1,3 @@
-import type { Tool } from '$lib/types';
 import { colord, extend } from 'colord';
 import hwbPlugin from 'colord/plugins/hwb';
 import lchPlugin from 'colord/plugins/lch';
@@ -7,10 +6,11 @@ import cmykPlugin from 'colord/plugins/cmyk';
 import ColorPreview from './ColorPreview.svelte';
 import ColorIcon from '@lucide/svelte/icons/palette';
 import type { Colord } from 'colord';
+import { defineTool } from '$lib/tools';
 
 extend([hwbPlugin, lchPlugin, cmykPlugin]);
 
-export const tool: Tool = {
+export default defineTool({
 	name: 'Color',
 	icon: ColorIcon,
 	path: '/color',
@@ -18,7 +18,7 @@ export const tool: Tool = {
 	guess(input: string): Colord | undefined {
 		return parseColor(input);
 	}
-};
+});
 
 export function parseColor(input: string) {
 	const color = colord(input);

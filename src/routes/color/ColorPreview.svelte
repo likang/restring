@@ -4,11 +4,10 @@
 	import { untrack } from 'svelte';
 	import Color from './Color.svelte';
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
-	import { tool } from './color';
-	import type { Colord } from 'colord';
+	import colorTool from './color';
 
 	$effect(() => {
-		if (globalStates.preview?.name === tool.name) {
+		if (globalStates.preview?.name === colorTool.name) {
 			untrack(() => {
 				states.color = globalStates.preview!.value;
 			});

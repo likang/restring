@@ -1,13 +1,13 @@
-import type { Tool } from '$lib/types';
 import JsonPreview from './JsonPreview.svelte';
 import JsonIcon from '$lib/components/icons/Json.svelte';
+import { defineTool } from '$lib/tools';
 
 export type JsonValue = { obj: any; txt: string };
 
 const jsonStartRegex = /^\s*[\{\[]/;
 export const HISTORY_KEY_JSON = 'history-json';
 
-export const tool: Tool = {
+export default defineTool({
 	name: 'JSON',
 	icon: JsonIcon,
 	path: '/json',
@@ -23,4 +23,4 @@ export const tool: Tool = {
 			return undefined;
 		}
 	}
-};
+});

@@ -5,11 +5,11 @@
 	import { globalStates } from '../state.svelte';
 	import { states } from './state.svelte';
 	import { untrack } from 'svelte';
-	import { tool } from './json';
+	import jsonTool from './json';
 	import type { JsonValue } from './json';
 
 	$effect(() => {
-		if (globalStates.preview?.name === tool.name) {
+		if (globalStates.preview?.name === jsonTool.name) {
 			untrack(() => {
 				const value: JsonValue = globalStates.preview!.value;
 				states.obj = value.obj;

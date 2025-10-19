@@ -1,18 +1,18 @@
-import type { Tool } from '$lib/types';
+import { defineTool } from '$lib/tools';
 import UrlEncodingPreview from './UrlEncodingPreview.svelte';
 import PercentIcon from '@lucide/svelte/icons/percent';
 
-export type UrlEncodingPreviewResult = {
+export type UrlEncodingPreviewValue = {
 	type: 'encoded' | 'txt';
 	content: string;
 };
 
-export const tool: Tool = {
+export default defineTool({
 	name: 'URL Encoding',
 	icon: PercentIcon,
 	path: '/url-encoding',
 	preview: UrlEncodingPreview,
-	guess(input: string): UrlEncodingPreviewResult | undefined {
+	guess(input: string): UrlEncodingPreviewValue | undefined {
 		if (!/^https?:\/\//i.test(input)) {
 			return undefined;
 		}
@@ -40,4 +40,4 @@ export const tool: Tool = {
 			return undefined;
 		}
 	}
-};
+});
