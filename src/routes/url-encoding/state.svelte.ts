@@ -4,7 +4,7 @@ class States {
 	encoded: string = $state('');
 	encodedError: boolean = $state(false);
 	type: 'uri' | 'uri-component' = $state('uri');
-	from: 'txt' | 'encoded' = 'txt';
+	from: 'txt' | 'encoded' = $state('txt');
 }
 
 export const states = new States();

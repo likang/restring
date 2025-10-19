@@ -5,14 +5,13 @@
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
+	import { tool } from './base64';
 
 	$effect(() => {
-		const decoded =
-			globalStates.preview?.name === 'base64' ? globalStates.preview.value : undefined;
-		if (decoded) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
-				states.txt = decoded;
-				states.encoded = globalStates.trimmedInputText;
+				states.txt = globalStates.preview!.value;
+				states.encoded = globalStates.trimmedInput;
 				states.txtError = false;
 				states.encodedError = false;
 			});

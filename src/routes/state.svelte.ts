@@ -3,16 +3,16 @@ import type { Preview } from '$lib/types';
 import { allTools } from '$lib/tools';
 
 class States {
-	inputText: string = $state('');
+	input: string = $state('');
 
-	trimmedInputText: string = $derived(this.inputText.trim());
+	trimmedInput: string = $derived(this.input.trim());
 
 	preview: Preview | undefined = $derived.by(() => {
-		if (this.trimmedInputText.length > 0) {
+		if (this.trimmedInput.length > 0) {
 			for (const tool of allTools) {
-				let result = tool.parse(this.trimmedInputText);
+				let result = tool.guess(this.trimmedInput);
 				if (result) {
-					return { name: tool.name, component: tool.component, value: result };
+					return { name: tool.name, component: tool.preview, value: result };
 				}
 			}
 		}
@@ -20,7 +20,7 @@ class States {
 	});
 
 	reset() {
-		this.inputText = '';
+		this.input = '';
 	}
 }
 

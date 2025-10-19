@@ -4,12 +4,13 @@
 	import { untrack } from 'svelte';
 	import Color from './Color.svelte';
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
+	import { tool } from './color';
+	import type { Colord } from 'colord';
 
 	$effect(() => {
-		const color = globalStates.preview?.name === 'color' ? globalStates.preview.value : undefined;
-		if (color) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
-				states.color = color;
+				states.color = globalStates.preview!.value;
 			});
 		}
 	});

@@ -5,11 +5,13 @@
 	import { globalStates } from '../state.svelte';
 	import { states } from './state.svelte';
 	import { untrack } from 'svelte';
+	import { tool } from './json';
+	import type { JsonValue } from './json';
 
 	$effect(() => {
-		const value = globalStates.preview?.name === 'json' ? globalStates.preview.value : undefined;
-		if (value) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
+				const value: JsonValue = globalStates.preview!.value;
 				states.obj = value.obj;
 				states.txt = value.txt;
 			});

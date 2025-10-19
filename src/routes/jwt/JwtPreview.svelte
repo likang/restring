@@ -4,13 +4,14 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { states } from './state.svelte';
 	import JsonEditor from '$lib/components/JsonEditor.svelte';
+	import { tool } from './jwt';
+	import type { JwtValue } from './jwt';
 
 	$effect(() => {
-		const value = globalStates.preview?.name === 'jwt' ? globalStates.preview.value : undefined;
-		if (value) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
-				states.inputText = globalStates.trimmedInputText;
-				states.value = value;
+				states.inputText = globalStates.trimmedInput;
+				states.value = globalStates.preview!.value;
 			});
 		}
 	});

@@ -5,16 +5,26 @@
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
+	import type { UrlEncodingPreviewResult } from './url-encoding';
+	import { tool } from './url-encoding';
 
 	$effect(() => {
-		const decoded =
-			globalStates.preview?.name === 'url-encoding' ? globalStates.preview.value : undefined;
-		if (decoded) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
+				const value: UrlEncodingPreviewResult = globalStates.preview!.value;
+
 				states.type = 'uri';
-				states.from = 'encoded';
-				states.txt = decoded;
-				states.encoded = globalStates.trimmedInputText;
+				if (value.type === 'encoded') {
+					states.encoded = value.content;
+					states.from = 'txt';
+					states.txt = globalStates.trimmedInput;
+				} else if (value.type === 'txt') {
+					states.txt = value.content;
+					states.from = 'encoded';
+					states.encoded = globalStates.trimmedInput;
+				} else {
+					return;
+				}
 				states.txtError = false;
 				states.encodedError = false;
 			});
@@ -31,5 +41,5 @@
 		<div class="flex-1"></div>
 		<CopyButton text={() => states.txt} />
 	</div>
-	<PreviewTextCard text={states.txt} />
+	<PreviewTextCard text={states.from === 'txt' ? states.encoded : states.txt} />
 </div>

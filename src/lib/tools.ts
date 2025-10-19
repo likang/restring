@@ -1,17 +1,17 @@
-import type { ToolConfig } from './types';
+import type { Tool } from './types';
 
-import json from '../routes/json/json';
-import datetime from '../routes/datetime/datetime';
-import color from '../routes/color/color';
-import base64 from '../routes/base64/base64';
-import jwt from '../routes/jwt/jwt';
-import urlEncoding from '../routes/url-encoding/url-encoding';
+import { tool as jsonTool } from '../routes/json/json';
+import { tool as datetimeTool } from '../routes/datetime/datetime';
+import { tool as colorTool } from '../routes/color/color';
+import { tool as base64Tool } from '../routes/base64/base64';
+import { tool as jwtTool } from '../routes/jwt/jwt';
+import { tool as urlEncodingTool } from '../routes/url-encoding/url-encoding';
 
-export const allTools: ToolConfig[] = [
-	json(),
-	datetime(),
-	color(),
-	base64(),
-	jwt(),
-	urlEncoding()
+export const allTools: Tool[] = [
+	jsonTool,
+	datetimeTool,
+	colorTool,
+	base64Tool,
+	jwtTool,
+	urlEncodingTool
 ];

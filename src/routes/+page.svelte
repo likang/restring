@@ -8,7 +8,7 @@
 	globalStates.reset();
 
 	function historySelected(his: string) {
-		globalStates.inputText = his;
+		globalStates.input = his;
 		unshiftHistory(his);
 	}
 
@@ -16,11 +16,11 @@
 		const pastedText = event.clipboardData?.getData('text') ?? '';
 		setTimeout(() => {
 			if (
-				pastedText.length === globalStates.inputText.length &&
+				pastedText.length === globalStates.input.length &&
 				globalStates.preview !== undefined &&
 				globalStates.preview.name !== 'unknown'
 			) {
-				unshiftHistory(globalStates.trimmedInputText);
+				unshiftHistory(globalStates.trimmedInput);
 			}
 		}, 0);
 	}
@@ -48,7 +48,7 @@
 			<HistoryButton {historySelected} />
 		</div>
 		<textarea
-			bind:value={globalStates.inputText}
+			bind:value={globalStates.input}
 			onpaste={onPaste}
 			spellcheck="false"
 			placeholder="Try json, timestamp, color, base64, jwt, or url-encoded text"
@@ -57,7 +57,7 @@
 		<div class="preview-wrapper mt-4">
 			{#if PreviewComponent}
 				<PreviewComponent />
-			{:else if globalStates.trimmedInputText.length > 0}
+			{:else if globalStates.trimmedInput.length > 0}
 				<PreviewTextCard>
 					<p class="text-muted-foreground flex min-h-30 items-center justify-center">
 						No preview is available.

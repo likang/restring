@@ -4,14 +4,13 @@
 	import ExternalLinkIcon from '@lucide/svelte/icons/external-link';
 	import { states } from './state.svelte';
 	import Datetime from './Datetime.svelte';
+	import { tool } from './datetime';
 
 	$effect(() => {
-		const value =
-			globalStates.preview?.name === 'datetime' ? globalStates.preview.value : undefined;
-		if (value) {
+		if (globalStates.preview?.name === tool.name) {
 			untrack(() => {
-				states.inputText = globalStates.trimmedInputText;
-				states.date = value;
+				states.inputText = globalStates.trimmedInput;
+				states.date = globalStates.preview!.value;
 			});
 		}
 	});

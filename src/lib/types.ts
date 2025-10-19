@@ -1,11 +1,11 @@
 import type { Component } from 'svelte';
 
-export type ToolConfig = {
+export type Tool = {
 	name: string;
 	icon: Component;
 	path: string;
-	component: Component;
-	parse(input: string): any;
+	preview: Component;
+	guess(input: string): any;
 };
 
 export type Preview = {

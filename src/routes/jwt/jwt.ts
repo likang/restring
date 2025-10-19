@@ -1,5 +1,5 @@
 import JwtPreview from './JwtPreview.svelte';
-import type { ToolConfig } from '$lib/types';
+import type { Tool } from '$lib/types';
 import { base64Decode } from '$lib/base64';
 import JwtIcon from '$lib/components/icons/Jwt.svelte';
 
@@ -9,17 +9,15 @@ export type JwtValue = {
 	signature: string;
 };
 
-export default function jwt(): ToolConfig {
-	return {
-		name: 'JWT',
-		icon: JwtIcon,
-		path: '/jwt',
-		component: JwtPreview,
-		parse(input: string) {
-			return parseJwt(input);
-		}
-	};
-}
+export const tool: Tool = {
+	name: 'JWT',
+	icon: JwtIcon,
+	path: '/jwt',
+	preview: JwtPreview,
+	guess(input: string) {
+		return parseJwt(input);
+	}
+};
 
 export function parseJwt(input: string): JwtValue | undefined {
 	input = input.trim();
