@@ -4,7 +4,7 @@ import DatetimePreview from './DatetimePreview.svelte';
 import TimeIcon from '@lucide/svelte/icons/clock';
 
 export default defineTool({
-	name: 'Date/Time',
+	name: 'Datetime',
 	icon: TimeIcon,
 	path: '/datetime',
 	preview: DatetimePreview,
