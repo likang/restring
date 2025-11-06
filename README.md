@@ -15,6 +15,8 @@
 - **URL:** Encode and decode URL components.
 - **Color:** Convert between different color formats (Hex, RGB, HSL).
 - **DateTime:** Convert and manipulate dates and times.
+- **UUID:** Generate universally unique identifiers (UUIDs).
+
 - And more to come!
 
 ## Getting Started
