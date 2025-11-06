@@ -7,7 +7,7 @@
 
 	let {
 		text,
-		class: className = 'btn-icon-ghost',
+		class: className = '',
 		tooltip
 	}: { text: string | TextCallback; class?: string; tooltip?: string } = $props();
 
@@ -38,7 +38,7 @@
 	});
 </script>
 
-<button onclick={handleClick} class={className} data-tooltip={tooltip}>
+<button onclick={handleClick} class="btn-icon-ghost {className}" data-tooltip={tooltip}>
 	{#if isCopied}
 		<DoneIcon />
 	{:else}

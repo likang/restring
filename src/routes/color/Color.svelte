@@ -10,11 +10,13 @@
 
 {#snippet itemRow(label: string, value: () => string)}
 	<div class="text-muted-foreground text-right text-xs whitespace-nowrap">{label}</div>
-	<div class="group hover:bg-muted/50 relative min-h-9 rounded-md p-2">
+	<div
+		class="group hover:bg-muted/50 relative flex min-h-9 items-center justify-between gap-2 rounded-md p-2"
+	>
 		<p class="font-mono text-sm">{value()}</p>
 		<CopyButton
 			text={value}
-			class="btn-icon-ghost invisible absolute top-1/2 right-1 size-7 -translate-y-1/2 rounded-sm group-hover:visible"
+			class="text-muted-foreground hover:text-accent-foreground size-6 rounded-sm group-hover:visible md:invisible"
 		/>
 	</div>
 {/snippet}
