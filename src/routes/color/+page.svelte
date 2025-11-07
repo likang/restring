@@ -3,6 +3,9 @@
 	import { states } from './state.svelte';
 	import ColorPicker from './ColorPicker.svelte';
 	import { parseColor } from './color';
+	if (states.color === undefined) {
+		states.color = parseColor('#fff');
+	}
 </script>
 
 <svelte:head>
