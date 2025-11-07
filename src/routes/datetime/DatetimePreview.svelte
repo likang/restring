@@ -20,7 +20,7 @@
 
 <div class="py-1">
 	<a href={datetimeTool.path} class="btn-link px-0 text-sm">
-		<span class="text-lg font-semibold">{datetimeTool.name}</span>
+		<h2 class="text-lg font-semibold">Datetime Converter</h2>
 		<ExternalLinkIcon class="size-4" />
 	</a>
 </div>

@@ -29,13 +29,13 @@
 >
 	<JsonEditor txt={states.txt} {onDocChanged}>
 		{#snippet header()}
-			<span class="text-lg font-semibold">Source</span>
+			<h2 class="text-lg font-semibold">JSON Text</h2>
 		{/snippet}
 	</JsonEditor>
 
 	<JsonEditor obj={states.obj} readonly>
 		{#snippet header()}
-			<span class="text-lg font-semibold">Formatted</span>
+			<h2 class="text-lg font-semibold">JSON Formatted</h2>
 		{/snippet}
 	</JsonEditor>
 </div>

@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import DownIcon from '@lucide/svelte/icons/chevron-down';
 	import { afterNavigate } from '$app/navigation';
 
 	let txtInput: HTMLTextAreaElement;
 	let encodedInput: HTMLTextAreaElement;
+	const vPopoverId = 'encoding-type-v-popover';
+
+	const typeOptions: Map<typeof states.type, string> = new Map([
+		['uri', 'As URI'],
+		['uri-component', 'As URI Component']
+	]);
 
 	function onTxtInput(event: Event) {
 		const txt = (event.target as HTMLTextAreaElement).value;
@@ -75,7 +82,7 @@
 
 <div class="mb-6">
 	<div class="flex items-center py-1">
-		<span class="text-lg font-semibold">Text</span>
+		<h2 class="text-lg font-semibold">Text</h2>
 		<div class="flex-1"></div>
 		<CopyButton text={() => states.txt} />
 	</div>
@@ -89,34 +96,45 @@
 	></textarea>
 
 	<div class="flex items-center py-1">
-		<fieldset class="flex flex-row gap-2">
-			<label class="label">
-				<input
-					type="radio"
-					name="type-group"
-					value="uri"
-					class="input"
-					checked={states.type === 'uri'}
-					bind:group={states.type}
-					onchange={onTypeChange}
-				/>
-				<span class="text-lg">URI</span>
-			</label>
-			<label class="label">
-				<input
-					type="radio"
-					name="type-group"
-					value="uri-component"
-					class="input"
-					checked={states.type === 'uri-component'}
-					bind:group={states.type}
-					onchange={onTypeChange}
-				/>
-				<span class="text-lg">URI Component</span>
-			</label>
-		</fieldset>
+		<h2 class="text-lg font-semibold">URL Encoded</h2>
 
 		<div class="flex-1"></div>
+
+		<div id={vPopoverId} class="dropdown-menu">
+			<button
+				type="button"
+				id={vPopoverId + '-trigger'}
+				aria-haspopup="menu"
+				aria-controls={vPopoverId + '-menu'}
+				aria-expanded="false"
+				class="btn-ghost"
+			>
+				{typeOptions.get(states.type)}
+				<DownIcon class="text-muted-foreground" />
+			</button>
+			<div
+				id={vPopoverId + '-popover'}
+				data-popover
+				data-align="end"
+				aria-hidden="true"
+				class="min-w-16"
+			>
+				<div role="menu" id={vPopoverId + '-menu'} aria-labelledby={vPopoverId + '-trigger'}>
+					{#each typeOptions as [t, name]}
+						{#if t !== states.type}
+							<button
+								role="menuitem"
+								onclick={() => {
+									states.type = t;
+									onTypeChange();
+								}}>{name}</button
+							>
+						{/if}
+					{/each}
+				</div>
+			</div>
+		</div>
+
 		<CopyButton text={() => states.encoded} />
 	</div>
 	<textarea

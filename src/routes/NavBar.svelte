@@ -22,10 +22,7 @@
 >
 	<a class="flex flex-row items-end gap-1 text-2xl font-bold" href="/">
 		<ShellIcon class="size-7" />
-		<span>
-			<span class="font-bold underline decoration-wavy decoration-1 underline-offset-4">re</span
-			><span>string</span>
-		</span>
+		<h1>restring</h1>
 	</a>
 
 	<div class="flex-1"></div>
@@ -42,7 +39,7 @@
 			>
 				<currentTool.icon />
 				{currentTool.name}
-				<DownIcon />
+				<DownIcon class="text-muted-foreground" />
 			</button>
 			<div
 				id={toolsPopoverId + '-popover'}

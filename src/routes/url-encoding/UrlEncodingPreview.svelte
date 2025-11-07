@@ -34,7 +34,7 @@
 <div class="mb-6">
 	<div class="flex items-center py-1">
 		<a href={urlEncodingTool.path} class="btn-link px-0 text-sm">
-			<span class="text-lg font-semibold">{urlEncodingTool.name}</span>
+			<h2 class="text-lg font-semibold">URL Encoding</h2>
 			<ExternalLinkIcon class="size-4" />
 		</a>
 		<div class="flex-1"></div>

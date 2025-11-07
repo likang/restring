@@ -73,7 +73,7 @@
 			bind:value={states.inputText}
 			oninput={onInput}
 			aria-invalid={states.inputError}
-			placeholder="Datetime string"
+			placeholder="Try timestamp, ISO date, UTC, etc."
 		/>
 
 		<button class="btn-outline" onclick={onClickNow}>Now</button>

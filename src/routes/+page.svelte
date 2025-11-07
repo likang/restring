@@ -39,11 +39,12 @@
 <div class="m-auto max-w-2xl px-6">
 	<div class="mt-6">
 		<div class="flex items-center py-1">
-			<h3 class="text-lg font-semibold">Quick Preview</h3>
+			<h2 class="text-lg font-semibold">Quick Preview</h2>
 			<div class="flex-1"></div>
 			<HistoryButton {historySelected} />
 		</div>
 		<textarea
+			name="preview-input"
 			bind:value={globalStates.input}
 			onpaste={onPaste}
 			spellcheck="false"

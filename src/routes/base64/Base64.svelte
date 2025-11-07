@@ -24,7 +24,7 @@
 
 <div class="mb-6">
 	<div class="flex items-center py-1">
-		<span class="text-lg font-semibold">Text</span>
+		<h2 class="text-lg font-semibold">Text</h2>
 		<div class="flex-1"></div>
 		<CopyButton text={() => states.txt} />
 	</div>
@@ -37,7 +37,7 @@
 	></textarea>
 
 	<div class="flex items-center py-1">
-		<span class="text-lg font-semibold">Base64 Encoded</span>
+		<h2 class="text-lg font-semibold">Base64 Encoded</h2>
 		<div class="flex-1"></div>
 		<CopyButton text={() => states.encoded} />
 	</div>
