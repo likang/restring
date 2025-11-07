@@ -1,17 +1,11 @@
 <script lang="ts">
 	import ArrowRightLeftIcon from '@lucide/svelte/icons/arrow-right-left';
 	import ArrowDownUpIcon from '@lucide/svelte/icons/arrow-down-up';
-	import { states } from './state.svelte';
-	import { diffChars } from 'diff';
+	import DownIcon from '@lucide/svelte/icons/chevron-down';
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
+	import { diffModes, states } from './state.svelte';
 
-	let diffCharsResult = $derived(diffChars(states.originalText, states.modifiedText));
-	let addedCount = $derived.by(() => {
-		return diffCharsResult.filter((diff) => diff.added).length;
-	});
-	let removedCount = $derived.by(() => {
-		return diffCharsResult.filter((diff) => diff.removed).length;
-	});
+	const vPopoverId = 'diff-mode-popover';
 
 	function onSwitch() {
 		const originalText = states.originalText;
@@ -37,6 +31,35 @@
 		<h2 class="text-lg font-semibold">Text Diff Checker</h2>
 
 		<div class="flex-1"></div>
+
+		<div id={vPopoverId} class="dropdown-menu">
+			<button
+				type="button"
+				id={vPopoverId + '-trigger'}
+				aria-haspopup="menu"
+				aria-controls={vPopoverId + '-menu'}
+				aria-expanded="false"
+				class="btn-ghost"
+			>
+				{states.diffMode}
+				<DownIcon />
+			</button>
+			<div
+				id={vPopoverId + '-popover'}
+				data-popover
+				data-align="end"
+				aria-hidden="true"
+				class="min-w-16"
+			>
+				<div role="menu" id={vPopoverId + '-menu'} aria-labelledby={vPopoverId + '-trigger'}>
+					{#each diffModes as mode}
+						{#if mode !== states.diffMode}
+							<button role="menuitem" onclick={() => (states.diffMode = mode)}>{mode}</button>
+						{/if}
+					{/each}
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div class="mb-6 flex flex-col gap-2 md:flex-row">
@@ -67,20 +90,20 @@
 		</div>
 	</div>
 
-	{#if addedCount > 0 || removedCount > 0}
+	{#if states.addedCount > 0 || states.removedCount > 0}
 		<div class="text-muted-foreground mb-2 text-sm">
-			{#if addedCount > 0}
-				<span class="text-green-600">{addedCount} added</span>
+			{#if states.addedCount > 0}
+				<span class="text-green-600">{states.addedCount} added</span>
 			{/if}
-			{#if addedCount > 0 && removedCount > 0}
+			{#if states.addedCount > 0 && states.removedCount > 0}
 				<span class="text-muted-foreground">, </span>
 			{/if}
-			{#if removedCount > 0}
-				<span class="text-red-600">{removedCount} removed</span>
+			{#if states.removedCount > 0}
+				<span class="text-red-600">{states.removedCount} removed</span>
 			{/if}
 		</div>
 		<div class="min-h-32 rounded-md border p-3 whitespace-pre-wrap md:text-sm">
-			{#each diffCharsResult as diff}
+			{#each states.diffResult as diff}
 				{#if diff.added}
 					<span class="diff-added">{diff.value}</span>
 				{:else if diff.removed}
