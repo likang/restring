@@ -28,17 +28,19 @@
 	<div class="flex-1"></div>
 
 	{#if currentTool}
-		<div id={toolsPopoverId} class="dropdown-menu">
+		<div id={toolsPopoverId} class="dropdown-menu min-w-0">
 			<button
 				type="button"
 				id={toolsPopoverId + '-trigger'}
 				aria-haspopup="menu"
 				aria-controls={toolsPopoverId + '-menu'}
 				aria-expanded="false"
-				class="btn-ghost"
+				class="btn-ghost min-w-0 shrink-1"
 			>
 				<currentTool.icon />
-				{currentTool.name}
+				<span class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+					>{currentTool.name}</span
+				>
 				<DownIcon class="text-muted-foreground" />
 			</button>
 			<div
