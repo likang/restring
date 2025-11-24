@@ -20,7 +20,7 @@
 
 <div class="py-1">
 	<a href={jwtTool.path} class="btn-link px-0 text-sm">
-		<h2 class="text-lg font-semibold">JWT Decoder</h2>
+		<h2 class="text-sm font-medium">JWT Decoder</h2>
 		<ExternalLinkIcon class="size-4" />
 	</a>
 </div>

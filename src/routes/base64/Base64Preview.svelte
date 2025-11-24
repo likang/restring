@@ -24,7 +24,7 @@
 <div class="mb-6">
 	<div class="flex items-center py-1">
 		<a href={base64Tool.path} class="btn-link px-0 text-sm">
-			<h2 class="text-lg font-semibold">Base64 Encoding</h2>
+			<h2 class="text-sm font-medium">Base64 Encoding</h2>
 			<ExternalLinkIcon class="size-4" />
 		</a>
 		<div class="flex-1"></div>

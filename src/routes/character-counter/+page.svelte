@@ -33,7 +33,7 @@
 
 <div class="m-auto max-w-2xl px-6 pt-6">
 	<div class="mb-2 flex flex-row items-center gap-2">
-		<h2 class="text-lg font-semibold">Character Counter</h2>
+		<h2 class="text-sm font-medium">Character Counter</h2>
 
 		<div class="flex-1"></div>
 

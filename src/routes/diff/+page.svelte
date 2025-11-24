@@ -20,15 +20,12 @@
 		name="description"
 		content="Compare text, files, and code online to find differences. Free text diff checker with side-by-side comparison and highlighting of changes."
 	/>
-	<meta
-		name="keywords"
-		content="text diff, diff checker, text compare, file compare, text comparison, diff tool, compare text online, text difference, code diff, online diff tool, restring"
-	/>
+	<meta name="keywords" content="text diff, text compare, text comparison, diff tool, restring" />
 </svelte:head>
 
 <div class="m-auto max-w-4xl px-6 pt-6">
 	<div class="mb-2 flex flex-row items-center gap-2">
-		<h2 class="text-lg font-semibold">Text Diff Checker</h2>
+		<h2 class="text-sm font-medium">Text Diff Checker</h2>
 
 		<div class="flex-1"></div>
 
