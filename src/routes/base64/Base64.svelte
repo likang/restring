@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { states } from './state.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
-	import DownloadIcon from '@lucide/svelte/icons/download';
 	import ImageIcon from '@lucide/svelte/icons/image';
 	import { base64Encode, base64Decode, isImageBase64 } from '$lib/base64';
-	import { downloadBlob } from '$lib/file';
+	import DownloadImageButton from './DownloadImageButton.svelte';
 
 	function onTxtInput(event: Event) {
 		const txt = (event.target as HTMLTextAreaElement).value;
@@ -47,17 +46,6 @@
 				alert('Failed to read image');
 			};
 			reader.readAsDataURL(file);
-		}
-	}
-
-	async function downloadImage() {
-		const match = states.imageEncoded.match(/^\s*data:image\/([a-zA-Z]+)/);
-		if (match) {
-			const response = await fetch(states.imageEncoded);
-			const blob = await response.blob();
-			const type = match[1];
-			const filename = `image.${type}`;
-			downloadBlob(blob, filename);
 		}
 	}
 
@@ -128,13 +116,7 @@
 				onchange={onImageInput}
 				class="hidden"
 			/>
-			<button
-				class="btn-icon-ghost"
-				disabled={states.imageEncodedError || states.imageEncoded.length === 0}
-				onclick={downloadImage}
-			>
-				<DownloadIcon />
-			</button>
+			<DownloadImageButton />
 		{/if}
 	</div>
 	{#if states.type === 'text'}

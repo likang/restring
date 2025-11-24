@@ -7,15 +7,23 @@
 	import PreviewTextCard from '$lib/components/PreviewTextCard.svelte';
 	import base64Tool from './base64';
 	import { previewValueOfTool } from '$lib/types';
+	import DownloadImageButton from './DownloadImageButton.svelte';
 
 	$effect(() => {
 		const value = previewValueOfTool(globalStates.preview, base64Tool);
 		if (value) {
 			untrack(() => {
-				states.txt = value;
-				states.encoded = globalStates.trimmedInput;
-				states.txtError = false;
-				states.encodedError = false;
+				states.type = value.type;
+				if (value.type === 'text') {
+					states.txt = value.result;
+					states.encoded = globalStates.trimmedInput;
+					states.txtError = false;
+					states.encodedError = false;
+				} else if (value.type === 'image') {
+					states.imageSrc = value.result;
+					states.imageEncoded = value.result;
+					states.imageEncodedError = false;
+				}
 			});
 		}
 	});
@@ -28,7 +36,17 @@
 			<ExternalLinkIcon class="size-4" />
 		</a>
 		<div class="flex-1"></div>
-		<CopyButton text={() => states.txt} />
+		{#if states.type === 'text'}
+			<CopyButton text={() => states.txt} />
+		{:else if states.type === 'image'}
+			<DownloadImageButton />
+		{/if}
 	</div>
-	<PreviewTextCard text={states.txt} />
+	{#if states.type === 'text'}
+		<PreviewTextCard text={states.txt} />
+	{:else if states.type === 'image'}
+		<div class="flex h-64 items-center justify-center rounded-md border">
+			<img src={states.imageSrc} alt="Base64 Preview" class="max-h-full max-w-full" />
+		</div>
+	{/if}
 </div>
