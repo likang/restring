@@ -61,6 +61,7 @@
 
 	import { unshiftHistory } from '$lib/history';
 	import { HISTORY_KEY_JSON } from '../../routes/json/json';
+	import { downloadBlob } from '$lib/file';
 
 	let cmContainer: HTMLDivElement;
 	let headerContainer: HTMLDivElement;
@@ -254,14 +255,7 @@
 	function downloadJson() {
 		const jsonStr = editorView?.state?.doc?.toString() ?? '';
 		const blob = new Blob([jsonStr], { type: 'application/json' });
-		const url = URL.createObjectURL(blob);
-		const link = document.createElement('a');
-		link.href = url;
-		link.download = 'data.json';
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-		URL.revokeObjectURL(url);
+		downloadBlob(blob, 'data.json');
 	}
 </script>
 
