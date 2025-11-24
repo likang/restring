@@ -26,7 +26,17 @@ export function base64ToBytes(base64: string): Uint8Array<ArrayBuffer> | undefin
 	return Uint8Array.from(binString, (m) => m.codePointAt(0)!);
 }
 
-function bytesToBase64(bytes: Uint8Array) {
+export function bytesToBase64(bytes: Uint8Array) {
 	const binString = Array.from(bytes, (byte) => String.fromCodePoint(byte)).join('');
 	return btoa(binString);
+}
+
+export function isImageBase64(encoded: string): boolean {
+	const match = encoded.match(/^\s*data:image\/[a-zA-Z0-9+\-.]+;base64,(.*)$/);
+	let bytes: Uint8Array<ArrayBuffer> | undefined = undefined;
+	if (match) {
+		const pureBase64 = match[1];
+		bytes = base64ToBytes(pureBase64);
+	}
+	return bytes !== undefined && bytes.length > 0;
 }
