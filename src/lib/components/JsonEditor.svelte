@@ -23,7 +23,8 @@
 		syntaxHighlighting,
 		defaultHighlightStyle,
 		bracketMatching,
-		foldKeymap
+		foldKeymap,
+		codeFolding
 	} from '@codemirror/language';
 	import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 	import { history, defaultKeymap, historyKeymap } from '@codemirror/commands';
@@ -120,7 +121,69 @@
 		rectangularSelection(),
 		crosshairCursor(),
 		highlightSelectionMatches(),
-		keymap.of([...defaultKeymap, ...searchKeymap, ...historyKeymap, ...foldKeymap])
+		keymap.of([...defaultKeymap, ...searchKeymap, ...historyKeymap, ...foldKeymap]),
+		// Add custom fold placeholder to show array/object sizes
+		codeFolding({
+			preparePlaceholder: (state, range) => {
+				// The range doesn't include outer brackets, so we need to find them
+				// Find the first previous { or [ from range.from
+				let expandedFrom = range.from;
+				let openBracket = '';
+				while (expandedFrom > 0) {
+					expandedFrom--;
+					const char = state.doc.sliceString(expandedFrom, expandedFrom + 1);
+					if (char === '{' || char === '[') {
+						openBracket = char;
+						break;
+					}
+				}
+
+				// Find the matching closing bracket
+				const closeBracket = openBracket === '{' ? '}' : ']';
+				let expandedTo = range.to;
+				const docLength = state.doc.length;
+				while (expandedTo < docLength) {
+					const char = state.doc.sliceString(expandedTo, expandedTo + 1);
+					expandedTo++;
+					if (char === closeBracket) {
+						break;
+					}
+				}
+
+				const text = state.doc.sliceString(expandedFrom, expandedTo);
+				let size = 0;
+				let type = '';
+
+				try {
+					const parsed = JSON.parse(text);
+					if (Array.isArray(parsed)) {
+						size = parsed.length;
+						type = size === 1 ? 'item' : 'items';
+					} else if (typeof parsed === 'object' && parsed !== null) {
+						size = Object.keys(parsed).length;
+						type = size === 1 ? 'property' : 'properties';
+					}
+				} catch (e) {
+					// If parsing fails, return null to use default placeholder
+					return null;
+				}
+
+				return { size, type };
+			},
+			placeholderDOM: (view, onclick, prepared) => {
+				const element = document.createElement('span');
+				element.className = 'cm-foldPlaceholder';
+				element.onclick = onclick;
+
+				if (prepared && prepared.size !== undefined) {
+					element.textContent = `${prepared.size} ${prepared.type}`;
+				} else {
+					element.textContent = '…';
+				}
+
+				return element;
+			}
+		})
 	])();
 
 	onMount(() => {
