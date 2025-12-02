@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { states } from './state.svelte';
+	import { tick } from 'svelte';
 
 	let editing = $state(false);
 	let invalid = $state(false);
@@ -16,15 +17,17 @@
 			element.textContent = '0';
 		}
 
-		element.focus();
-		try {
-			const range = document.createRange();
-			range.selectNodeContents(element);
+		tick().then(() => {
+			element.focus();
+			try {
+				const range = document.createRange();
+				range.selectNodeContents(element);
 
-			const selection = window.getSelection();
-			selection?.removeAllRanges();
-			selection?.addRange(range);
-		} catch (e) {}
+				const selection = window.getSelection();
+				selection?.removeAllRanges();
+				selection?.addRange(range);
+			} catch (e) {}
+		});
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
